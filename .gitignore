@@ -47,3 +47,8 @@ Temporary Items
 .apdisk
 *.pdf
 acmart-master
+*.log
+*.bak
+*.aux
+*.out
+*.gz
