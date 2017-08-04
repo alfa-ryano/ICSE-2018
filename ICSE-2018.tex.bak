@@ -2,6 +2,39 @@
 
 \usepackage{booktabs} % For formal tables
 
+%\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{graphicx}
+	\graphicspath{{images/}} 
+%\usepackage{cite}
+\usepackage{courier}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true,allcolors=blue}
+\usepackage{listings}
+	\lstset{
+  		basicstyle=\ttfamily,
+  		frame=none,
+  		breaklines=true,
+  		numbers=left,
+  		xleftmargin=2em,
+  		framexleftmargin=0em,
+    	emphstyle=\textbf,
+    	float=t
+	}
+	\lstdefinestyle{cbp-xml}{
+	    basicstyle=\ttfamily\scriptsize,
+  		emph={
+        	register, create, add, to, resource,
+        	from, eattribute, remove, ereference,
+        	set, unset, session, Roy, Jen,
+        	Moss, Richmond
+    	}
+	}
+	\lstdefinestyle{eol}{
+	    basicstyle=\ttfamily\scriptsize,
+  		emph={
+        	var, new, for, in
+    	}
+	}
 
 % Copyright
 %\setcopyright{none}
@@ -29,6 +62,10 @@
 
 
 \begin{document}
+\renewcommand{\thelstlisting}{\arabic{lstlisting}}
+\renewcommand{\labelitemi}{$\bullet$}
+\newcommand{\ts}{\textsuperscript}
+
 \title{Optimising Change-based Model's Loading Performance}
 %\titlenote{Produces the permission block, and copyright information}
 %\subtitle{Extended Abstract}
