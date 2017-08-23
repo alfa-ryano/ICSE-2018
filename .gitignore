@@ -50,3 +50,6 @@ Temporary Items
 *.aux
 *.out
 *.gz
+*.log
+*.aux
+*.gz
