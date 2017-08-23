@@ -16,58 +16,140 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{yohannis2017turning}
+\providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{Abstract}{1}{section*.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Change-based Models}{1}{section.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Events}{1}{section.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Model History}{1}{section.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Optimisation Principles}{1}{section.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}The Last Value is All that Matters}{1}{subsection.5.1}}
-\newlabel{lst:set_attribute_eol}{{1}{1}{The EOL code for Setting Attribute}{lstlisting.1}{}}
-\newlabel{lst:set_attribute_eol@cref}{{[lstlisting][1][]1}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}The EOL code for Setting Attribute.}{1}{lstlisting.1}}
-\newlabel{lst:set_attribute_cbp}{{2}{1}{The generated change-based representation of Lst. \ref {lst:set_attribute_eol}}{lstlisting.2}{}}
-\newlabel{lst:set_attribute_cbp@cref}{{[lstlisting][2][]2}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}The generated change-based representation of Lst. \ref  {lst:set_attribute_eol}.}{1}{lstlisting.2}}
-\newlabel{lst:set_attribute_eobject_history}{{3}{1}{The event-line relationships recorded by an EObjectHistory of Lst. \ref {lst:set_attribute_eol}}{lstlisting.3}{}}
-\newlabel{lst:set_attribute_eobject_history@cref}{{[lstlisting][3][]3}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}The event-line relationships recorded by an EObjectHistory of Lst. \ref  {lst:set_attribute_eol}.}{1}{lstlisting.3}}
-\newlabel{lst:set_attribute_optimised_cbp}{{4}{1}{The optimised change-based Representation of Lst. \ref {lst:set_attribute_eol}}{lstlisting.4}{}}
-\newlabel{lst:set_attribute_optimised_cbp@cref}{{[lstlisting][4][]4}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}The optimised change-based Representation of Lst. \ref  {lst:set_attribute_eol}.}{1}{lstlisting.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Unset Ignores Itself and Its Previous Sets and Unsets}{1}{subsection.5.2}}
-\newlabel{lst:unset_attribute_eol}{{5}{1}{The EOL code for Nullyfying/Unsetting Attribute}{lstlisting.5}{}}
-\newlabel{lst:unset_attribute_eol@cref}{{[lstlisting][5][]5}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}The EOL code for Nullyfying/Unsetting Attribute.}{1}{lstlisting.5}}
-\citation{Lamport:LaTeX}
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\newlabel{sec:introduction@cref}{{[section][1][]1}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Change-based Persistence}{1}{section.2}}
+\newlabel{sec:change_based_persistence}{{2}{1}{Change-based Persistence}{section.2}{}}
+\newlabel{sec:change_based_persistence@cref}{{[section][2][]2}{1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces A class diagram of a simple tree modelling language.\relax }}{1}{figure.caption.5}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:node_metamodel}{{1}{1}{A class diagram of a simple tree modelling language.\relax }{figure.caption.5}{}}
+\newlabel{fig:node_metamodel@cref}{{[figure][1][]1}{1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces A tree model -- node \emph  {n3} and \emph  {n5} are deleted from a model that also contains nodes \emph  {n1}, \emph  {n2}, \emph  {n3}, and \emph  {n4}.\relax }}{1}{figure.caption.6}}
+\newlabel{fig:initial_model}{{2}{1}{A tree model -- node \emph {n3} and \emph {n5} are deleted from a model that also contains nodes \emph {n1}, \emph {n2}, \emph {n3}, and \emph {n4}.\relax }{figure.caption.6}{}}
+\newlabel{fig:initial_model@cref}{{[figure][2][]2}{1}}
+\citation{selic2003pragmatics}
+\citation{egyed2011automatically}
+\citation{jouault2010towards}
+\citation{ogunyomi2015property}
+\citation{rath2012derived}
+\citation{kelter2005generic}
+\citation{rath2012derived}
+\citation{ogunyomi2015property}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Related Work}{2}{section.3}}
+\newlabel{sec:related_work}{{3}{2}{Related Work}{section.3}{}}
+\newlabel{sec:related_work@cref}{{[section][3][]3}{2}}
+\citation{yohannis2017turning}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Proposed Approach}{3}{section.4}}
+\newlabel{sec:proposed_approach}{{4}{3}{Proposed Approach}{section.4}{}}
+\newlabel{sec:proposed_approach@cref}{{[section][4][]4}{3}}
+\newlabel{lst:xmimodel}{{1}{3}{State-based representation of the model of Figure \ref {fig:initial_model} after removal of node \emph {n5} in (simplified) XMI}{lstlisting.1}{}}
+\newlabel{lst:xmimodel@cref}{{[lstlisting][1][]1}{3}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}State-based representation of the model of Figure \ref  {fig:initial_model} after removal of node \emph  {n5} in (simplified) XMI.}{3}{lstlisting.1}}
+\newlabel{lst:cbpmodel}{{2}{3}{Change-based representation of the model of Figure \ref {fig:initial_model} after removal of node \emph {n5}}{lstlisting.2}{}}
+\newlabel{lst:cbpmodel@cref}{{[lstlisting][2][]2}{3}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Change-based representation of the model of Figure \ref  {fig:initial_model} after removal of node \emph  {n5}.}{3}{lstlisting.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Notifications and Events}{3}{subsection.4.1}}
+\newlabel{sec:notifications_and_events}{{4.1}{3}{Notifications and Events}{subsection.4.1}{}}
+\newlabel{sec:notifications_and_events@cref}{{[subsection][1][4]4.1}{3}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces An algorithm to capture an event in a change notification method.\relax }}{3}{algocf.1}}
+\newlabel{alg:capture_events}{{1}{3}{Notifications and Events}{algocf.1}{}}
+\newlabel{alg:capture_events@cref}{{[algocf][1][]1}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Model History}{4}{subsection.4.2}}
+\newlabel{sec:model_history}{{4.2}{4}{Model History}{subsection.4.2}{}}
+\newlabel{sec:model_history@cref}{{[subsection][2][4]4.2}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A class diagram of recording object history.\relax }}{4}{figure.caption.8}}
+\newlabel{fig:object_history}{{3}{4}{A class diagram of recording object history.\relax }{figure.caption.8}{}}
+\newlabel{fig:object_history@cref}{{[figure][3][]3}{4}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces An algorithm to save events captured in Alg. \ref  {alg:capture_events} into a model history.\relax }}{4}{algocf.2}}
+\newlabel{alg:fill_history}{{2}{4}{Model History}{algocf.2}{}}
+\newlabel{alg:fill_history@cref}{{[algocf][2][]2}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces An object diagram showing the structure of object history of the model in Fig. \ref  {fig:initial_model}. The red rectangles contain line numbers that are going to ignored when loading CBP.\relax }}{5}{figure.caption.10}}
+\newlabel{fig:history_structure}{{4}{5}{An object diagram showing the structure of object history of the model in Fig. \ref {fig:initial_model}. The red rectangles contain line numbers that are going to ignored when loading CBP.\relax }{figure.caption.10}{}}
+\newlabel{fig:history_structure@cref}{{[figure][4][]4}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Loading Time Optimisation}{6}{section.5}}
+\newlabel{sec:loading_time_optimisation}{{5}{6}{Loading Time Optimisation}{section.5}{}}
+\newlabel{sec:loading_time_optimisation@cref}{{[section][5][]5}{6}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces CBP loading optimisation algorithm.\relax }}{6}{algocf.3}}
+\newlabel{alg:optimised_load}{{3}{6}{Loading Time Optimisation}{algocf.3}{}}
+\newlabel{alg:optimised_load@cref}{{[algocf][3][]3}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Set and Unset Operations}{6}{subsection.5.1}}
+\newlabel{subsec:set_and_unset_operations}{{5.1}{6}{Set and Unset Operations}{subsection.5.1}{}}
+\newlabel{subsec:set_and_unset_operations@cref}{{[subsection][1][5]5.1}{6}}
+\newlabel{lst:set_unset_example}{{3}{6}{Example of CBP representation of \emph {name} attribute assignments}{lstlisting.3}{}}
+\newlabel{lst:set_unset_example@cref}{{[lstlisting][3][]3}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}Example of CBP representation of \emph  {name} attribute assignments.}{6}{lstlisting.3}}
+\newlabel{lst:set_unset_example2}{{4}{6}{Example of CBP representation of \emph {name} reference assignments}{lstlisting.4}{}}
+\newlabel{lst:set_unset_example2@cref}{{[lstlisting][4][]4}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}Example of CBP representation of \emph  {name} reference assignments.}{6}{lstlisting.4}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Algorithm to identify lines that can be ignored for attribute's \emph  {set} and \emph  {unset} operations\relax }}{6}{algocf.4}}
+\newlabel{alg:fill_ignore_list}{{4}{6}{Set and Unset Operations}{algocf.4}{}}
+\newlabel{alg:fill_ignore_list@cref}{{[algocf][4][]4}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Add, Remove, and Move Operations}{6}{subsection.5.2}}
+\newlabel{subsec:add_remove_and_move_operations}{{5.2}{6}{Add, Remove, and Move Operations}{subsection.5.2}{}}
+\newlabel{subsec:add_remove_and_move_operations@cref}{{[subsection][2][5]5.2}{6}}
+\newlabel{lst:add_remove_attribute_literal_example}{{5}{7}{Example of CBP representation of attribute \emph {values}'s add and remove operations}{lstlisting.5}{}}
+\newlabel{lst:add_remove_attribute_literal_example@cref}{{[lstlisting][5][]5}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}Example of CBP representation of attribute \emph  {values}'s add and remove operations.}{7}{lstlisting.5}}
+\newlabel{lst:add_remove_attribute_object_example}{{6}{7}{Example of CBP representation of attribute \emph {values}'s add and remove operations}{lstlisting.6}{}}
+\newlabel{lst:add_remove_attribute_object_example@cref}{{[lstlisting][6][]6}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Example of CBP representation of attribute \emph  {values}'s add and remove operations.}{7}{lstlisting.6}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces Algorithm to identify lines that can be ignored for attribute's \emph  {add}, \emph  {remove}, and \emph  {move} operations\relax }}{7}{algocf.5}}
+\newlabel{alg:fill_ignore_list_add_remove_attribute}{{5}{7}{Add, Remove, and Move Operations}{algocf.5}{}}
+\newlabel{alg:fill_ignore_list_add_remove_attribute@cref}{{[algocf][5][]5}{7}}
+\newlabel{lst:move_attribute_example}{{7}{7}{Example of CBP representation of attribute \emph {values}'s move operations}{lstlisting.7}{}}
+\newlabel{lst:move_attribute_example@cref}{{[lstlisting][7][]7}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}Example of CBP representation of attribute \emph  {values}'s move operations.}{7}{lstlisting.7}}
+\newlabel{lst:move_attribute_example_error}{{8}{8}{Example of optimised CBP representation of attribute \emph {values}'s move operations}{lstlisting.8}{}}
+\newlabel{lst:move_attribute_example_error@cref}{{[lstlisting][8][]8}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}Example of optimised CBP representation of attribute \emph  {values}'s move operations.}{8}{lstlisting.8}}
+\newlabel{lst:move_attribute_object_example}{{9}{8}{Example of CBP representation of attribute \emph {values}'s move operations}{lstlisting.9}{}}
+\newlabel{lst:move_attribute_object_example@cref}{{[lstlisting][9][]9}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {9}Example of CBP representation of attribute \emph  {values}'s move operations.}{8}{lstlisting.9}}
+\newlabel{lst:move_attribute_example_object_error}{{10}{8}{Example of optimised CBP representation of attribute \emph {values}'s move operations}{lstlisting.10}{}}
+\newlabel{lst:move_attribute_example_object_error@cref}{{[lstlisting][10][]10}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10}Example of optimised CBP representation of attribute \emph  {values}'s move operations.}{8}{lstlisting.10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Create and Delete Operations}{8}{subsection.5.3}}
+\newlabel{subsec:create_and_delete_operations}{{5.3}{8}{Create and Delete Operations}{subsection.5.3}{}}
+\newlabel{subsec:create_and_delete_operations@cref}{{[subsection][3][5]5.3}{8}}
+\newlabel{lst:cbpmodel_optimised}{{11}{8}{Change-based representation of the model of Figure \ref {fig:initial_model} after removal of node \emph {n5}}{lstlisting.11}{}}
+\newlabel{lst:cbpmodel_optimised@cref}{{[lstlisting][11][]11}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}Change-based representation of the model of Figure \ref  {fig:initial_model} after removal of node \emph  {n5}.}{8}{lstlisting.11}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {6}{\ignorespaces Algorithm to identify lines that are ignored after \emph  {delete} operations\relax }}{8}{algocf.6}}
+\newlabel{alg:create_delete}{{6}{8}{Create and Delete Operations}{algocf.6}{}}
+\newlabel{alg:create_delete@cref}{{[algocf][6][]6}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Loading Time Test}{8}{section.6}}
+\newlabel{sec:loading_time_test}{{6}{8}{Loading Time Test}{section.6}{}}
+\newlabel{sec:loading_time_test@cref}{{[section][6][]6}{8}}
+\citation{kolovos2006epsilon}
 \bibstyle{ACM-Reference-Format}
 \bibdata{ICSE-2018-bibliography}
-\bibcite{Lamport:LaTeX}{{1}{1986}{{Lamport}}{{Lamport}}}
+\bibcite{egyed2011automatically}{{1}{2011}{{Egyed}}{{Egyed}}}
+\bibcite{jouault2010towards}{{2}{2010}{{Jouault and Tisi}}{{Jouault and Tisi}}}
+\bibcite{kelter2005generic}{{3}{2005}{{Kelter et~al\unhbox \voidb@x \hbox {.}}}{{Kelter, Wehren, and Niere}}}
+\bibcite{kolovos2006epsilon}{{4}{2006}{{Kolovos et~al\unhbox \voidb@x \hbox {.}}}{{Kolovos, Paige, and Polack}}}
+\bibcite{ogunyomi2015property}{{5}{2015}{{Ogunyomi et~al\unhbox \voidb@x \hbox {.}}}{{Ogunyomi, Rose, and Kolovos}}}
+\bibcite{rath2012derived}{{6}{2012}{{R{\'a}th et~al\unhbox \voidb@x \hbox {.}}}{{R{\'a}th, Heged{\"u}s, and Varr{\'o}}}}
+\bibcite{selic2003pragmatics}{{7}{2003}{{Selic}}{{Selic}}}
+\bibcite{yohannis2017turning}{{8}{ming}{{Yohannis et~al\unhbox \voidb@x \hbox {.}}}{{Yohannis, Polack, and Kolovos}}}
 \newlabel{tocindent-1}{0pt}
 \newlabel{tocindent0}{0pt}
-\newlabel{tocindent1}{6.25499pt}
-\newlabel{tocindent2}{14.53499pt}
-\newlabel{tocindent3}{19.89899pt}
-\newlabel{lst:unset_attribute_cbp}{{6}{2}{The generated change-based representation of Lst. \ref {lst:unset_attribute_eol}}{lstlisting.6}{}}
-\newlabel{lst:unset_attribute_cbp@cref}{{[lstlisting][6][]6}{2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}The generated change-based representation of Lst. \ref  {lst:unset_attribute_eol}.}{2}{lstlisting.6}}
-\newlabel{lst:unset_attribute_eobject_history}{{7}{2}{The event-line relationships recorded by an EObjectHistory of Lst. \ref {lst:unset_attribute_eol}}{lstlisting.7}{}}
-\newlabel{lst:unset_attribute_eobject_history@cref}{{[lstlisting][7][]7}{2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}The event-line relationships recorded by an EObjectHistory of Lst. \ref  {lst:unset_attribute_eol}.}{2}{lstlisting.7}}
-\newlabel{lst:unset_attribute_optimised_cbp}{{8}{2}{The optimised change-based Representation of Lst. \ref {lst:unset_attribute_eol}}{lstlisting.8}{}}
-\newlabel{lst:unset_attribute_optimised_cbp@cref}{{[lstlisting][8][]8}{2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}The optimised change-based Representation of Lst. \ref  {lst:unset_attribute_eol}.}{2}{lstlisting.8}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Performance}{2}{section.6}}
-\newlabel{lst:deep_tree_eol}{{9}{2}{The EOL code for creating deep tree of nodes}{lstlisting.9}{}}
-\newlabel{lst:deep_tree_eol@cref}{{[lstlisting][9][]9}{2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {9}The EOL code for creating deep tree of nodes.}{2}{lstlisting.9}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Loading Deep Tree}{2}{subsection.6.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Related Work}{2}{section.7}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusions}{2}{section.8}}
-\@writefile{toc}{\contentsline {section}{Acknowledgments}{2}{section*.7}}
-\@writefile{toc}{\contentsline {section}{References}{2}{section*.9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Loading performance between loading XMI, optimised CBP, and CBP.\relax }}{2}{figure.caption.5}}
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:deep_tree}{{1}{2}{Loading performance between loading XMI, optimised CBP, and CBP.\relax }{figure.caption.5}{}}
-\newlabel{fig:deep_tree@cref}{{[figure][1][]1}{2}}
-\newlabel{TotPages}{{2}{2}{}{page.2}{}}
+\newlabel{tocindent1}{4.185pt}
+\newlabel{tocindent2}{10.34999pt}
+\newlabel{tocindent3}{0pt}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A comparison on loading time between XMI (LoaXMI), optimised CBP (LoOCBP), and non-optimised CBP (LoaCBP).\relax }}{9}{figure.caption.15}}
+\newlabel{fig:loading_speed}{{5}{9}{A comparison on loading time between XMI (LoaXMI), optimised CBP (LoOCBP), and non-optimised CBP (LoaCBP).\relax }{figure.caption.15}{}}
+\newlabel{fig:loading_speed@cref}{{[figure][5][]5}{9}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{9}{section.7}}
+\newlabel{sec:limitations}{{7}{9}{Limitations}{section.7}{}}
+\newlabel{sec:limitations@cref}{{[section][7][]7}{9}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusions}{9}{section.8}}
+\newlabel{sec:conclusions}{{8}{9}{Conclusions}{section.8}{}}
+\newlabel{sec:conclusions@cref}{{[section][8][]8}{9}}
+\@writefile{toc}{\contentsline {section}{Acknowledgments}{9}{section*.17}}
+\@writefile{toc}{\contentsline {section}{References}{9}{section*.19}}
+\newlabel{TotPages}{{9}{9}{}{page.9}{}}

@@ -37,13 +37,97 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
-\bibitem[\protect\citeauthoryear{Lamport}{Lamport}{1986}]%
-        {Lamport:LaTeX}
-\bibfield{author}{\bibinfo{person}{Leslie Lamport}.}
-  \bibinfo{year}{1986}\natexlab{}.
-\newblock \bibinfo{booktitle}{{\em \it {\LaTeX}: A Document Preparation
-  System}}.
-\newblock \bibinfo{publisher}{Addison-Wesley}, \bibinfo{address}{Reading, MA.}
+\bibitem[\protect\citeauthoryear{Egyed}{Egyed}{2011}]%
+        {egyed2011automatically}
+\bibfield{author}{\bibinfo{person}{Alexander Egyed}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Automatically detecting and tracking
+  inconsistencies in software design models}.
+\newblock \bibinfo{journal}{{\em IEEE Transactions on Software Engineering\/}}
+  \bibinfo{volume}{37}, \bibinfo{number}{2} (\bibinfo{year}{2011}),
+  \bibinfo{pages}{188--204}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Jouault and Tisi}{Jouault and Tisi}{2010}]%
+        {jouault2010towards}
+\bibfield{author}{\bibinfo{person}{Fr{\'e}d{\'e}ric Jouault} {and}
+  \bibinfo{person}{Massimo Tisi}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Towards Incremental Execution of ATL
+  Transformations.}
+\newblock \bibinfo{journal}{{\em ICMT\/}}  \bibinfo{volume}{10}
+  (\bibinfo{year}{2010}), \bibinfo{pages}{123--137}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Kelter, Wehren, and Niere}{Kelter
+  et~al\mbox{.}}{2005}]%
+        {kelter2005generic}
+\bibfield{author}{\bibinfo{person}{Udo Kelter}, \bibinfo{person}{J{\"u}rgen
+  Wehren}, {and} \bibinfo{person}{J{\"o}rg Niere}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{A Generic Difference Algorithm for UML Models.}
+\newblock \bibinfo{journal}{{\em Software Engineering\/}} \bibinfo{volume}{64},
+  \bibinfo{number}{105-116} (\bibinfo{year}{2005}), \bibinfo{pages}{4--9}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Kolovos, Paige, and Polack}{Kolovos
+  et~al\mbox{.}}{2006}]%
+        {kolovos2006epsilon}
+\bibfield{author}{\bibinfo{person}{Dimitrios~S Kolovos},
+  \bibinfo{person}{Richard~F Paige}, {and} \bibinfo{person}{Fiona Polack}.}
+  \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{The epsilon object language (EOL)}.
+\newblock \bibinfo{journal}{{\em ECMDA-FA\/}}  \bibinfo{volume}{6}
+  (\bibinfo{year}{2006}), \bibinfo{pages}{128--142}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Ogunyomi, Rose, and Kolovos}{Ogunyomi
+  et~al\mbox{.}}{2015}]%
+        {ogunyomi2015property}
+\bibfield{author}{\bibinfo{person}{Babajide Ogunyomi}, \bibinfo{person}{Louis~M
+  Rose}, {and} \bibinfo{person}{Dimitrios~S Kolovos}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Property access traces for source incremental
+  model-to-text transformation}. In \bibinfo{booktitle}{{\em European
+  Conference on Modelling Foundations and Applications}}. Springer,
+  \bibinfo{pages}{187--202}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{R{\'a}th, Heged{\"u}s, and Varr{\'o}}{R{\'a}th
+  et~al\mbox{.}}{2012}]%
+        {rath2012derived}
+\bibfield{author}{\bibinfo{person}{Istv{\'a}n R{\'a}th},
+  \bibinfo{person}{{\'A}bel Heged{\"u}s}, {and} \bibinfo{person}{D{\'a}niel
+  Varr{\'o}}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Derived features for EMF by integrating advanced
+  model queries}.
+\newblock \bibinfo{journal}{{\em Modelling Foundations and Applications\/}}
+  (\bibinfo{year}{2012}), \bibinfo{pages}{102--117}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Selic}{Selic}{2003}]%
+        {selic2003pragmatics}
+\bibfield{author}{\bibinfo{person}{Bran Selic}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{The pragmatics of model-driven development}.
+\newblock \bibinfo{journal}{{\em IEEE software\/}} \bibinfo{volume}{20},
+  \bibinfo{number}{5} (\bibinfo{year}{2003}), \bibinfo{pages}{19--25}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Yohannis, Polack, and Kolovos}{Yohannis
+  et~al\mbox{.}}{ming}]%
+        {yohannis2017turning}
+\bibfield{author}{\bibinfo{person}{Alfa Yohannis}, \bibinfo{person}{Fiona
+  Polack}, {and} \bibinfo{person}{Dimitris Kolovos}.} \bibinfo{year}{2017
+  forthcoming}\natexlab{}.
+\newblock \showarticletitle{Turning Models Inside Out}. In
+  \bibinfo{booktitle}{{\em FlexMDE@MoDELS}}.
 \newblock
 
 

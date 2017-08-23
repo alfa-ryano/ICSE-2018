@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 	\graphicspath{{images/}} 
 %\usepackage{cite}
+\usepackage[linesnumbered,ruled]{algorithm2e}
 \usepackage{courier}
 \usepackage{hyperref}
     \hypersetup{colorlinks=true,allcolors=blue}
@@ -15,12 +16,30 @@
   		frame=none,
   		breaklines=true,
   		numbers=left,
-  		xleftmargin=2em,
+  		xleftmargin=2.5em,
   		framexleftmargin=0em,
     	emphstyle=\textbf,
     	float=t
 	}
-	\lstdefinestyle{cbp-xml}{
+	\lstdefinestyle{ocl}{
+  		emph={
+        	context, inv
+    	}
+	}
+	\lstdefinestyle{cbp}{
+	    basicstyle=\ttfamily\scriptsize,
+  		emph={
+        	session, create, of, type,
+        	set, to, add, hire
+    	}
+	}
+	\lstdefinestyle{xmi}{
+		basicstyle=\ttfamily\scriptsize,
+  		emph={
+        	Node, children
+    	}
+	}
+	\lstdefinestyle{xml}{
 	    basicstyle=\ttfamily\scriptsize,
   		emph={
         	register, create, add, to, resource,
@@ -29,10 +48,22 @@
         	Moss, Richmond
     	}
 	}
+	\lstdefinestyle{java}{
+	    basicstyle=\ttfamily\scriptsize,
+  		emph={
+        	case, UNSET,
+        	instanceof, else, if, void,
+        	new, UnsetEAttributeEvent,
+        	UnsetEReferenceEvent,
+        	@override, public, class, extends
+    	}
+	}
 	\lstdefinestyle{eol}{
 	    basicstyle=\ttfamily\scriptsize,
   		emph={
-        	var, new, for, in
+        	var, new, for, in, create, set, of, with, 
+        	unset, to, add, remove, delete, register,
+        	from, position, from, move-within, session, \.
     	}
 	}
 
@@ -66,7 +97,7 @@
 \renewcommand{\labelitemi}{$\bullet$}
 \newcommand{\ts}{\textsuperscript}
 
-\title{Optimising Change-based Model's Loading Performance}
+\title{Change-based Persistence and Its Loading Optimisation}
 %\titlenote{Produces the permission block, and copyright information}
 %\subtitle{Extended Abstract}
 %\subtitlenote{The full version of the author's guide is available as
@@ -115,9 +146,7 @@
 
 
 \begin{abstract}
-This paper provides a sample of a \LaTeX\ document which conforms,
-somewhat loosely, to the formatting guidelines for
-ACM SIG Proceedings.\footnote{This is an abstract footnote}
+In this paper, we propose a change-based, as an alternative to stated-based, persistence as an approach to persist a model. The persistence enables high-performance processing (e.g. transformation, validation) for incremental model by reducing the change identification cost of evolving models. We illustrate our approach in implementing the persistence as well as its optimisation algorithms to improve its loading time. Based on our performance test on model loading time, optimised change-based persistence outperforms its unoptimised version. However, even though it still cannot outperform the stated-based persistence's loading time, it operates in the range of time that is still tolerable for users. 
 \end{abstract}
 
 %
@@ -156,123 +185,484 @@ ACM SIG Proceedings.\footnote{This is an abstract footnote}
 \maketitle
 
 \section{Introduction}
+\label{sec:introduction}
+To gain the advantages of Model-Based Software Engineering in the context of complex and large systems, the ability to process large models in an incremental fashion as they evolve is necessary. Existing incremental model processing techniques only yields limited performance benefits due to imprecise and slow model change detection capabilities or are only limited to a single-developer environment, which is not applicable for real-world software development projects.
 
-\section{Change-based Models}
+Instead of persisting snapshots of states of models, we propose turning models inside out and persisting their change history. The proposed approach has the potential to deliver step-change performance benefits in incremental model processing, as well as a wide range of other benefits and novel capabilities. This paper aims at extending our previous work, an early implementation of change-based persistence \cite{yohannis2017turning}, by proposing algorithms to optimise the loading time of the change-based persistence.
 
-\section{Events}
+The rest of the paper is structured as follows. %Section \ref{sec:the_key_challenge_of_ _incrementality} reviews the key-challenge of incrementality in MBSE. Section \ref{sec:identifying_changes_in models} provides an overview of existing approaches for identifying changes in models. Section \ref{sec:proposed_approach} overviews our proposed approach and Section \ref{sec:prototype_implementation} discusses our prototype implementation on top of the Eclipse Modelling Framework. The potential benefits and novel capabilities, as well as the challenges of change-based model persistence, are presented in Sect. \ref{sec:benefits_and_novel_capabilities} and Sect. \ref{sec:challenges_and_future_works} respectively. Section \ref{sec:evaluation_strategy} presents our evaluation strategy and Sect. \ref{sec:conclusions} concludes this paper.
 
-\section{Model History}
+\section{Change-based Persistence}
+\label{sec:change_based_persistence}
+A change-based model or change-based persistence (CBP) is a concept of model that records incremental changes -- incrementality -- of a model and uses the records for a variety of purposes, such as model analytics, optimising execution of model operations (e.g. validation, transformation), or generating different versions of a model based on its timeline. The incremental changes can be presented as, but not limited to, a collection of events arises from operations applied to a model during its construction. 
 
-\section{Optimisation Principles}
-
-
-\subsection{The Last Value is All that Matters}
-Lst. \ref{lst:set_attribute_eol} shows an EOL code to create a model. It performs set and unset operations to an attribute \texttt{name} of an object \texttt{node}. When executed, this code produces a CBP XML representation consists of 6 events shown in Lst. \ref{lst:set_attribute_cbp}. The 1\ts{st} event registers the package \texttt{node} and is followed by other events that create an object, with id "0", as an instance of a \texttt{Node} class (line 1) and then add the object to the model's resource to make the object a part of the model (line 2). The code then sets the attribute \texttt{name}'s value to "Old Name!" (line 3), then nullify/unset it (line 4), and finally sets it to "New Name!" as its latest value (line 5). Lst. \ref{lst:set_attribute_eol} shows that the last value's of \texttt{node.name} is all that matters (line 4). Any previous value assignment to the \texttt{name} attribute can be ignored (line 1 and 2), since the final version of the model will always be the same. 
-
-\begin{lstlisting}[style=eol,caption={The EOL code for Setting  Attribute.},label=lst:set_attribute_eol]
-var node = new Node;
-node.name = "Old Name!";
-node.name = null;
-node.name = "New Name!";
-\end{lstlisting}
-
-\begin{lstlisting}[style=cbp-xml,caption={The generated change-based representation of Lst. \ref{lst:set_attribute_eol}. },label=lst:set_attribute_cbp]
-0 <register epackage="node"/>
-1 <create eclass="Node" epackage="node" id="0"/>
-2 <add-to-resource position="0"><value eobject="0"/></add-to-resource>
-3 <set-eattribute name="name" target="0"><value literal="Old Name!"/></set-eattribute>
-4 <unset-eattribute name="name" target="0"/>
-5 <set-eattribute name="name" target="0"><value literal="New Name!"/></set-eattribute>
-\end{lstlisting}
-
-All events that involve the object "0" are recorded in an object history. The object history records the line number of occurrence of each event (Lst. \ref{lst:set_attribute_eobject_history}). For example, \texttt{SetEAttributeValue} event contains line 3 and 5 based on its occurrence. 
-
-\begin{lstlisting}[style=cbp-xml,caption={The event-line relationships recorded by an EObjectHistory of Lst. \ref{lst:set_attribute_eol}. },label=lst:set_attribute_eobject_history]
-EObject: 0
-    CreateEObjectEvent = [[1]]
-    AddToResourceEvent = [[2]]
-    EAttribute:
-        name:
-            UnsetEAttributeEvent = [[4]]
-            SetEAttributeEvent = [[3], [5]]
-\end{lstlisting}
-
-The history enables us to track which lines can be ignored for optimisation so that not every event is executed to produce the same model. From Lst. \ref{lst:set_attribute_eobject_history}, we can deduce that line 3 and 4 can be ignored since the \texttt{SetEAttributeValue}'s last event always sets the end value of the \texttt{name} attribute. 
-
-\begin{lstlisting}[style=cbp-xml,caption={The optimised change-based Representation of Lst. \ref{lst:set_attribute_eol}. },label=lst:set_attribute_optimised_cbp]
-0 <register epackage="node"/>
-1 <create eclass="Node" epackage="node" id="0"/>
-2 <add-to-resource position="0"><value eobject="0"/></add-to-resource>
-5 <set-eattribute name="name" target="0"><value literal="New Name!"/></set-eattribute>
-\end{lstlisting}
-
-\subsection{Unset Ignores Itself and Its Previous Sets and Unsets}
-
-\begin{lstlisting}[style=eol,caption={The EOL code for Nullyfying/Unsetting  Attribute.},label=lst:unset_attribute_eol]
-var node = new Node;
-node.name = "Old Name!";
-node.name = null;
-node.name = "New Name!";
-node.name = null;
-\end{lstlisting}
-
-\begin{lstlisting}[style=cbp-xml,caption={The generated change-based representation of Lst. \ref{lst:unset_attribute_eol}. },label=lst:unset_attribute_cbp]
-0 <register epackage="node"/>
-1 <create eclass="Node" epackage="node" id="0"/>
-2 <add-to-resource position="0"><value eobject="0"/></add-to-resource>
-3 <set-eattribute name="name" target="0"><value literal="Old Name!"/></set-eattribute>
-4 <unset-eattribute name="name" target="0"/>
-5 <set-eattribute name="name" target="0"><value literal="New Name!"/></set-eattribute>
-6 <unset-eattribute name="name" target="0"/>
-\end{lstlisting}
-
-\begin{lstlisting}[style=cbp-xml,caption={The event-line relationships recorded by an EObjectHistory of Lst. \ref{lst:unset_attribute_eol}. },label=lst:unset_attribute_eobject_history]
-EObject: 0
-    CreateEObjectEvent = [[1]]
-    AddToResourceEvent = [[2]]
-    EAttribute:
-        name:
-            UnsetEAttributeEvent = [[4], [6]]
-            SetEAttributeEvent = [[3], [5]]
-\end{lstlisting}
-
-\begin{lstlisting}[style=cbp-xml,caption={The optimised change-based Representation of Lst. \ref{lst:unset_attribute_eol}. },label=lst:unset_attribute_optimised_cbp]
-0 <register epackage="node"/>
-1 <create eclass="Node" epackage="node" id="0"/>
-2 <add-to-resource position="0"><value eobject="0"/></add-to-resource>
-\end{lstlisting}
-
-\section{Performance}
-
-\begin{lstlisting}[style=eol,caption={The EOL code for creating deep tree of nodes.},label=lst:deep_tree_eol]
-var eRoot = new Node;
-eRoot.name = "0";
-for(i in Sequence{1..40}){
-    var node = new Node;
-    node.name = i.asString();
-    eRoot.valNodes.add(node);
-	   eRoot = node;
-}
-\end{lstlisting}
-
-\subsection{Loading Deep Tree}
-\begin{figure}[b!]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{deep_tree}
-\caption{Loading performance between loading XMI, optimised CBP, and CBP.}
-\label{fig:deep_tree}
+\includegraphics[scale=0.5]{node_metamodel}
+\caption{A class diagram of a simple tree modelling language.}
+\label{fig:node_metamodel}
 \end{figure}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{initial_chart}
+\caption{A tree model -- node \emph{n3} and \emph{n5} are deleted from a model that also contains nodes \emph{n1}, \emph{n2}, \emph{n3}, and \emph{n4}.}
+\label{fig:initial_model}
+\end{figure}
+
+To help us explain the concept of incrementality and our approach to optimise its loading time, we use a simple tree modelling language (Fig. \ref{fig:node_metamodel} shows its class diagram) to create examples of  tree models to support our explanation. Essentially, the model consists of nodes in which every node can have one to many, containment references\footnote{Containment reference is a composite relationship which an object holds a reference to another object. Deleting the former deletes the the latter as well.} with other nodes (\emph{children} relationship). A node can can also have a have a single containment reference, \emph{associate} relationship, with another node. Every node has two attributes, \emph{name} and {values}. Attribute \emph{name} is a type of String and attribute \emph{values} contains a set of Integer.
+
+As the first, main example for this paper, we create a tree model as shown in Fig. \ref{fig:initial_model} using the modelling language in Fig. \ref{fig:node_metamodel}. Initially, the model consists of five nodes \emph{n1}, \emph{n2}, \emph{n3}, \emph{n4}, and \emph{n5}. Node \emph{n1} contains three direct nodes \emph{n2}, \emph{n3}, and \emph{n4}, and node \emph{n3} contains node {n5}. Later, nodes \emph{n3} are deleted from the model, which means node \emph{n5} is also deleted since node \emph{n5} is contained by node \emph{e3} (deleted nodes are coded with grey colour). After every modification of the model, the model needs to be (1) validated against a domain-specific constraint (a node can only have 3 or less children), and (2) transformed into a number of HTML files through a model-to-text transformation. Each file contains the name of the node, and the names of its direct children.
+
+Before nodes \emph{n3} and \emph{n5} are deleted from the model, when the validation constraint is evaluated against the initial model (Fig. \ref{fig:initial_model}), it verifies that each of the five nodes has three or less children, and the model-to-text transformation then produces five HTML files that correspond to the nodes in the model. The model is then updated by deleting nodes \emph{n3} and \emph{n5} from the model, which also node remove node \emph{n3} from node \emph{n1}. 
+
+A non-incremental model validation engine, after the removal of nodes \emph{n3} and \emph{n5}, would treat the model of Fig. \ref{fig:initial_model} as a new model and will evaluate the constraint above against every node in the model. An incremental model validation engine, on the other hand, would identify that the previously established satisfaction of the constraint for nodes \emph{n2} and \emph{n4} are not affected by the changes made, and would only re-evaluate the constraint for nodes \emph{n1} instead. 
+
+Similarly, a non-incremental model-to-text transformation would generate and overwrite all output text files from scratch. On the contrary, an incremental model-to-text transformation, would identify that it only needs to delete the HTML files of nodes \emph{n3} and \emph{n5} since they have been removed and generate a new HTML file for node \emph{n1} as the number of its children has changed -- but not the text files of nodes \emph{n2} and \emph{n4}, as these cannot have been affected by the changes made to the model.
+
+While the overhead of executing transformations and validation constraints on small models like the one in Fig. \ref{fig:initial_model} can be neglected, non-incremental execution can become a significant bottleneck for large evolving models, especially when a development cycle is closer to its end, when developers tend to perform many small changes to fine-tune systems. Thus, a sophisticated impact analysis is needed to reduce the amount of code regeneration in order to keep the overhead minimum \cite{selic2003pragmatics}.  
+
+%As an example to explain incremental re-execution of queries on structured models, we use an OCL implementation of the domain-specific constraint in List. \ref{lst:constraint}.
+%
+%\begin{lstlisting}[style=ocl,caption={OCL constraint requiring that nodes directly can only have 3 children or less.},label=lst:constraint]
+%context Node
+%inv equalOrLessThan3: self.children->size() <= 3
+%\end{lstlisting}
+%
+%During the initial evaluation of the constraint on the model of Fig. \ref{fig:initial_model} (before the removal of nodes \emph{n3} and \emph{n5}), an incremental OCL engine would compute the property access trace displayed in Table \ref{tab:property_access_trace} as a side-product. Now, when the model is updated (after the removal of nodes \emph{n3} and \emph{n5}), the execution engine can identify that: (1) There are two elements, \emph{n3} and nodes \emph{n5}, have been removed from the model for which the constraint has been evaluated; (2) The value of the children property of node \emph{n3} has changed, and as such, it needs to re-evaluate the constraint on this model-element.
+%
+%\begin{table}[ht]
+%\centering
+%\caption{Property-access trace of the evaluation of the constraint in List. \ref{lst:constraint} on the model of Fig. \ref{fig:initial_model}.}
+%\begin{tabular}{p{3cm} p{1.5cm} p{1.5cm} p{1.5cm}}
+%\hline 
+%\textbf{Constraint} & \textbf{Context} & \textbf{Accessed Element} & \textbf{Accessed Property} \\ 
+%\hline 
+%\emph{Node.equalOrLessThan3}  & \emph{n1} & \emph{n1} & \emph{children} \\ 
+%\emph{Node.equalOrLessThan3}  & \emph{n2} & \emph{n2} & \emph{children} \\ 
+%\emph{Node.equalOrLessThan3}  & \emph{n3} & \emph{n3} & \emph{children} \\ 
+%\emph{Node.equalOrLessThan3}  & \emph{n4} & \emph{n4} & \emph{children} \\ 
+%\emph{Node.equalOrLessThan3}  & \emph{n5} & \emph{n5} & \emph{children} \\ 
+%\hline 
+%\end{tabular} 
+%\label{tab:property_access_trace}
+%\end{table}
+
 \section{Related Work}
+\label{sec:related_work}
+There has been some work related to change-based persistence. In the pioneering work of Egyed \cite{egyed2011automatically}, in order to achieve incremental re-execution of (deterministic) queries on structured models, an execution engine needs to (1) record model element property accesses during the initial execution of the queries, (2) identify new and deleted elements and modified model element properties in the new version of the model, and (3) combine the information collected in the steps one and two to identify the subset of (potentially) affected rules/queries/templates that need to be re-executed. Egyed has shown that the property-access recording approach is applicable to queries of arbitrary complexity, as long as they are deterministic. More recent work has shown that variants of this approach can be used to achieve incrementality in a wide range of model processing operations, including model-to-model transformation \cite{jouault2010towards}, model-to-text transformation \cite{ogunyomi2015property}, model validation, and pattern matching \cite{rath2012derived}---as long as changes to models can be precisely identified (step 2 above).
+
+There are two approaches in the literature for identifying changes in models in order to enable incremental re-execution of model processing operations, emph{model differencing} and \emph{notifications}. \emph{Model differencing} approach eliminates the coupling between modelling tools and incremental execution engines. Instead of depending on live notifications, in this approach the developer in charge of automated model processing, needs to have access to a copy of the last version of the model that the model processing program (e.g. the model-to-text transformation) was executed upon, so that it can be compared against the current version of the model (e.g. using a model-differencing framework such as SiDiff \cite{kelter2005generic} or EMFCompare\footnote{\url{https://www.eclipse.org/emf/compare/}}) and the delta can be computed on demand. The main advantage of this approach is that it works well in a collaborative development environment where typically developers have distinct roles and responsibilities. On the downside, model comparison and differencing are computationally expensive and memory-greedy (both versions of the model need to be loaded into memory before they can be compared), thus largely undermining the time and resource saving potentials of incremental re-execution. This approach is adopted by the Xpand model-to-text transformation language. According to the developers of the language, using this approach, a speed-up of only around 50\% is observed compared to non-incremental transformation\footnote{\url{http://wiki.eclipse.org/Xpand/New_And_Noteworthy\#Incremental_Generation}}, which is consistent with our experience from using Xpand.
+
+In \emph{notification} approach, the incremental execution engine needs to hook into the notification facilities provided by the modelling tool through which the developer edits the model, so that the engine can directly receive notifications as soon as changes happen (e.g. a node (\emph{n5}) has been deleted, the name property of node \emph{n5} has been changed to ``E"). This is an approach taken by the IncQuery incremental pattern matching framework \cite{rath2012derived} and the ReactiveATL incremental model-to-model transformation engine \cite{ogunyomi2015property}. The main advantage of this approach is that precise and fine-grained change notifications are provided for free by the modelling tool (and thus do not need to be computed by the execution engine---which as discussed below can be expensive and inefficient). On the downside, this approach is a poor fit for collaborative development settings where modelling and automated model processing activities are performed by different members of the team.
+
+In summary, incremental model processing currently delivers significant performance benefits only in a single-developer environment where the modeller is also responsible for performing all the (incremental) model processing operations. As a result, in collaborative development environments, developers need to either forgo incremental model processing altogether or to work around this limitation by manually steering model processing programs to process only subsets of their models, which is cumbersome and error prone.
+
+\section{Proposed Approach}
+\label{sec:proposed_approach}
+The ambition of this research is to enable high-performance incremental model management in collaborative software development environments by challenging one of the fundamental assumptions of contemporary modelling frameworks and tools: as opposed to persisting snapshots of the state of models (which is what virtually all modelling tools and frameworks currently do), we propose turning models inside out and persisting their change history instead.
+
+\begin{lstlisting}[style=xmi,caption={State-based representation of the model of Figure \ref{fig:initial_model} after removal of node \emph{n5} in (simplified) XMI.},label=lst:xmimodel]
+<Node xmi:id="n1" name="A">
+  <children xmi:id="n2" name="B"/>
+  <children xmi:id="n3" name="C"/>
+  <children xmi:id="n4" name="D"/>
+</Node>
+\end{lstlisting}
+
+To illustrate the proposed approach, List. \ref{lst:xmimodel} shows a state-based representation of the model of Fig. \ref{fig:initial_model} after the removal of node \emph{n5} in (simplified) XMI, and List. \ref{lst:cbpmodel} shows the proposed equivalent change-based representation of the same model. Instead of a snapshot of the state of the model, the representation of List. \ref{lst:cbpmodel} captures the complete sequence of change events (create/set/unset/add/remove/move/delete) that were performed on the model since its creation. Replaying these changes produces the same state as the one captured in List. \ref{lst:xmimodel}, so the proposed representation carries at least as much information as the state-based representation.
+
+\begin{lstlisting}[style=eol,caption={Change-based representation of the model of Figure \ref{fig:initial_model} after removal of node \emph{n5}.},label=lst:cbpmodel]
+session s1
+create n1 of Node
+set name of n1 with "A"      //m5.name="A"
+create n2 of Node
+set name of n2 with "B"      //m5.name="B"
+create n3 of Node
+set name of n3 with "C"      //m5.name="C"
+create n4 of Node
+set name of n4 with "D"      //m5.name="D"
+create n5 of Node
+set name of n5 with "E"      //m5.name="E"
+add n2 to n1.children        //n1.children={n2}
+add n3 to n1.children        //n1.children={n2,n3}
+add n4 to n1.children        //n1.children={n2,n3,n4}
+add n5 to n3.children        //n3.children={n5}
+session s2
+remove n5 from n3.children   //n3.children={}
+delete n5 
+remove n3 from n1.children   //n3.children={n2,n4}
+delete n3
+\end{lstlisting}
+
+Such a representation is particularly suitable for incremental model processing. For example, if the model-to-text transformation discussed above ``remembers" that in its previous invocation it had processed up to editing session \emph{s1} of the model, it can readily identify the changes that have been made to the model since then instead of having to rediscover them through (expensive) state-based model differencing. For example, in in session \emph{s2} (lines 16-20), nodes \emph{n3} and \emph{n5} are deleted from the model and deletion of nodes n3 changes the number of nodes (children) that belongs to node {n1}. Therefore, previous generated HTML files then can be removed (for nodes \emph{n3} and \emph{n5}) or regerated (for node \emph{n1}). 
+
+From CBP in Lst. \ref{lst:cbpmodel}, we can tell that to produce model as in Lst. \ref{lst:xmimodel}, the model is constructed in two consecutive sessions (lines 1 and 16). In the first session (\emph{s1}), node \emph{n1} is created and its name attribute is assigned with a string value (lines 2 and 3). The same operations also are also applied to other nodes, from node \emph{n2} to \emph{n5}, sequentially (lines 4-11). After that, nodes \emph{n2}, \emph{n3}, and \emph{n4} are added to node \emph{n1} as its children (lines 12-14) whilst node \emph{n5} is added to node \emph{n3} (line 15). In the second session (\emph{s2}), node \emph{n5} is removed from \emph{n3} and then deleted (lines 17-18), followed by the removal of \emph{n3} from \emph{n1} and its deletion (lines 19-20).
+
+%-----------------------------------------------
+\subsection{Notifications and Events}
+\label{sec:notifications_and_events}
+To enable change-based persistence, relevant consecutive operations or events generated need to be captured and then can be transformed to produce change-based representation such as the one showed in List. \ref{lst:cbpmodel}. Existing technologies have already provided notification facilities that enable developers to record such operations and events. For example, Eclipse Modelling Framework has \emph{Notification}\footnote{\url{http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/org/eclipse/emf/common/notify/Notification.html}} class and \emph{notifyChanged}\footnote{\url{http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/org/eclipse/emf/ecore/util/EContentAdapter.html}} method that can be used to identify change events in a model. 
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\Input{an object of Notification $notification$, an value of Integer $lineNumber$, a list of Event $eventList$, an object of ModelHistory $modelHistory$}
+\Begin{
+    \uIf{getEventType($notification$) = Event.CREATE}{
+        $event$ $\leftarrow$ createEvent($notification$)\;
+        add $event$ to $eventList$\;
+        addEventToHistory($modelHistory$, $event$, $lineNumber$)\;
+        identify ignored lines and fill ignoreList\;
+        $lineNumber$ $\leftarrow$ $lineNumber$ + 1\;
+    }\ElseIf{getEventType($notification$) = Event.ADD}{
+        ...
+    }
+}
+\caption{An algorithm to capture an event in a change notification method.}
+\label{alg:capture_events}
+\end{algorithm}
+
+The basic algorithm to capture the change events is showed in Alg. \ref{alg:capture_events}. Basically, when and operation is applied to a model, an instance of such notification facilities execute a specific method to notify that there has been a change on the model (an event has just been triggered). We can then filter the notification based on its event type by using \emph{getEventType(notification)} function get the type of the event carried by the \emph{notification} and compared to specific event types that we want to filter (lines 2 and 7). If the specific event types are met, we can then execute further operations. 
+
+The algorithm creates an \emph{event} object by gathering certain information from the notification, such as affected object, affected feature (attribute or reference), event type, and operand's value (line 3). These information is useful to fill the model history in subsection \ref{sec:model_history}. The algorithm then add the \emph{event} into an \emph{eventList} (line 4). The \emph{eventList} can be further persisted into a CBP representation  \cite{yohannis2017turning}, such as the one in Lst. \ref{lst:cbpmodel}. The algorithm also add the event into a modelHistory using the \emph{addEventToHistory} procedure (line 5) (\emph{addEventToHistory} is discussed in the following subsection). After that, the algorithm tries to identify lines that can be ignored and then add them to the ignore list (line 6) (discussed in section \ref{sec:loading_time_optimisation}). The algorithm also receives \emph{lineNumber} as a variable to track the line number of the events filtered. Since we specify every event is mapped only to one line in CBP, \emph{lineNumber} has to be increased by 1 after every event recording into the history list (line 7). With such filter, we can adjust to collect only events that fits with our purpose as well as their line numbers.
+
+\subsection{Model History}
+\label{sec:model_history}
+Events captured in the Alg. \ref{alg:capture_events} are stored into a  history list -- a particular data structure and a set of operations that tracks objects, their events, and their  occurrence in a CBP representation. We name it a model history (Fig. \ref{fig:object_history}). A \emph{ModelHistory} can have many \emph{ObjectHistory}, which is reflection that a model can have more than one object as its elements.\emph{ObjectHistory} has an attribute object that identify an instance of the \emph{ObjectHistory} belongs to specific object. The attribute \emph{isMoved} is a flag used to identify the state of the object if the object is already affected by a \emph{move} operation (discussed in subsection \ref{subsec:add_remove_and_move_operations}). Each \emph{ObjectHistory} consists of one or more \emph{EventHistory} to reflect that an object can be involved in different types of events/operations. The \emph{EventHistory} records a set of \emph{Line} that contains lines where an object and its events occur in a CBP representation. The \emph{Line} has attributes \emph{lineNumber} and \emph{value} that hold its line number in the CBP representation and the value of involved operand respectively.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{object_history}
+\caption{A class diagram of recording object history.}
+\label{fig:object_history}
+\end{figure}
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\Input{an object of ModelHistory $modelHistory$, an object of Event $event$, a value of Integer $lineNumber$}
+\SetKwProg{Procedure}{procedure}{\\begin}{end}
+\Procedure{addEventToHistory($modelHistory$, $event$, $lineNumber$)}{
+    $object$ $\leftarrow$ getObject($event$)\;
+    \uIf{$object$ does not have $objectHistory$ in $modelHistory$}{
+        $objectHistory$ $\leftarrow$ createObjectHistory($object$, $modelHistory$)\;
+    }\Else{
+        $objectHistory$ $\leftarrow$ getObjectHistory($object$, $modelHistory$)\;
+    }
+    
+    $affectedFeature$ $\leftarrow$ getAffectedFeature($event$)\;  
+        \uIf{$affectedFeature$ is Attribute}{
+            addEventToAttributeHistory($objectHistory$, $event$, $affectedFeature$, $lineNumber$)\;  
+        }\ElseIf{$featureObject$ is Reference}{
+            addEventToReferenceHistory($objectHistory$, $event$, $affectedFeature$, $lineNumber$)\;  
+    }    
+    
+    $eventType$ $\leftarrow$ getEventType($event$)\;  
+    \uIf{$eventType$ does not have $eventHistory$ in $objectHistory$}{
+        $eventHistory$ $\leftarrow$  createEventHistory($eventType$, $objectHistory$)\;
+    }\Else{
+        $eventHistory$ $\leftarrow$ getEventHistory($eventType$, $objectHistory$)\;
+    }
+    $value$ $\leftarrow$ getValue($event$)\;
+    $line$ $\leftarrow$ createLine($lineNumber$, $value$)\;
+    add $line$ to $eventHistory$\;
+}
+\caption{An algorithm to save events captured in Alg. \ref{alg:capture_events} into a model history.}
+\label{alg:fill_history}
+\end{algorithm}
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]
+%\includegraphics[width=\linewidth]
+{history_structure}
+\caption{An object diagram showing the structure of object history of the model in Fig. \ref{fig:initial_model}. The red rectangles contain line numbers that are going to ignored when loading CBP.}
+\label{fig:history_structure}
+\end{figure*}
+
+To save events captured in Alg. \ref{alg:capture_events}, we follow steps in Alg. \ref{alg:fill_history}. The algorithm requires three input: \emph{modelHistory}, {\emph{event}, \emph{lineNumber}.  Inside the procedure \emph{addEventToHistory}, the algorithm starts by retrieving the \emph{object} affected by the occurring event from the \emph{event} using the get \emph{objectFunction} (line 3). The procedure then checks if the \emph{object}'s\emph{objectHistory} does not exists yet in the \emph{modelHistory} (line 4). If it is true then it creates a new one (line 5). If it is false then it retrieves the \emph{objectHistory} from the \emph{modelHistory} (line 7). 
+
+Lines 9 to 14 are specified to handle events that modify any feature -- an attribute or a containment reference -- of the object (for example, set a value to an attribute, add an object to a containment reference). From the \emph{event}, we can get the \emph{affectedFeature} using \emph{getAffectedFeature} function. If the \emph{affectedFeature} is attribute then the algorithm executes procedure \emph{addEventToAttributeHistory} (lines 10 and 11). If the \emph{affectedFeature} is reference then the algorithm executes procedure \emph{AddEventToReferenceHistory} (lines 12 and 13). Both \emph{addEventToAttributeHistory} and \emph{AddEventToReferenceHistory} are procedures that works similarly to procedure \emph{addEventToHistory} except that they create and add object history instances, as well as their event histories and lines, for the attribute and reference relationships in Fig. \ref{fig:object_history}. The object history instances represents the history of attributes and references that belongs to an object.
+
+After handling affected features, the algorithm retrieves\emph{eventType} that is held by the \emph{event} using \emph{getEventType} function (line 15). If the \emph{eventType}'s \emph{eventHistory} does not exists in the \emph{objectHistory} then the algorithm creates a new \emph{eventHistory} of the \emph{eventType} in the \emph{objectEvent}  using \emph{createEventHistory} function (lines 16 and 17). Otherwise, it retrieves the \emph{eventHistory} from the \emph{objectHistory} (lines 18 and 19). Using \emph{getValue} function, the algorithm gets any operand's \emph{value} used in the event (the \emph{value} can be null if the event does not use any value) (line 21). The algorithm then uses the \emph{lineNumber}, the \emph{value}, and \emph{createLine} function, to create an instance \emph{line} of class Line and adds it into \emph{eventHistory} (lines 22 and 23).   
+
+The operations that produce Lst. \ref{lst:cbpmodel}, if they are recorded into ModelHistory, yields structure depicted by the object diagram in Fig. \ref{fig:history_structure}. The red rectangles are the Line objects that contain information of line numbers that are going to be ignored when the CBP in Lst. \ref{lst:cbpmodel} is loaded. Some of the objects are collapsed, not displaying the lineNumber field, to save space. Their line numbers are reflected on their object names.  
+
+
+
+\section{Loading Time Optimisation}
+\label{sec:loading_time_optimisation}
+Loading all events to generate the end model of a CBP representation is not efficient, since we can have multiple operations that are cancelled by other operations -- they do not affect the state of the end model. One way to optimise it is by ignoring those operations. Every time an event occurs, we execute algorithms to identify previous events that are cancelled by an event and add them to an ignore list (Alg. \ref{alg:capture_events}, line 6). From the \emph{event} object in Alg. \ref{alg:capture_events}, we can identify what kind of  operations (e.g. create, add, delete) that they represent. With that information, we can perform certain algorithms, utilising the model history in section \ref{sec:model_history}, to identify ignorable lines and put them into the ignore list. We discuss the optimisation of \emph{set} and \emph{unset} operation in subsection \ref{subsec:set_and_unset_operations}, \emph{add}, \emph{remove}, and \emph{move} operations in subsection \ref{subsec:add_remove_and_move_operations}, and \emph{create} and \emph{delete} operations in subsection \ref{subsec:create_and_delete_operations}.
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\Input{a list of Event $eventList$, a list of integer $ignoreList$}
+\Begin{
+    \ForEach{$event$ in $eventList$}{
+        $lineNumber$ $\leftarrow$ getLineNumber($event$)\;
+        \If{$lineNumber$ is not in $ignoreList$}{
+            replay($event$)\;
+        }
+    }
+}
+\caption{CBP loading optimisation algorithm.}
+\label{alg:optimised_load}
+\end{algorithm}
+
+When a CBP representation is loaded, only events that are not contained in the ignore list that are replayed. In Alg. \ref{alg:optimised_load}, events that are in the \emph{eventList} are iterated one by one (line 2). The \emph{eventList} is loaded from a CBP representation. The algorithm then uses the \emph{getLineNumber} function to get the \emph{lineNumber} of each \emph{event} (line 3). The \emph{lineNumber} then is checked if it does not exist in the \emph{ignoreList} (line 4). If it is true then the \emph{event} is replayed (line 5), otherwise the \emph{event} is ignored.   
+
+\subsection{Set and Unset Operations}
+\label{subsec:set_and_unset_operations}
+During a model development, an attribute of an object can be assigned many times. We identify that the last value that is assigned to the attribute is all that matters -- the last assigned value is the value that is hold by the attribute in the end model. Previous assignments can be ignored since they do not affect the end version of a model. For example in List. \ref{lst:set_unset_example}, the attribute \emph{name} is assigned \emph{"A"}, and then \emph{"B"}, and then nullified (unset), and finally \emph{"C"}. We can execute only the last assignment (line 5) to optimise the execution, ignoring the previous operations, to produce the same end model as if we executes all the operations. 
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of \emph{name} attribute assignments.},label=lst:set_unset_example]
+create node of Node
+set name of node with "A"    //node.name="A"    
+set name of node with "B"    //node.name="B"
+unset name of node           //node.name=null
+set name of node with "C"    //node.name="C"
+\end{lstlisting}
+
+To make the optimisastion possible, the line numbers where the attribute \emph{name} affected in Lst. \ref{lst:set_unset_example} are stored into its respective object history.  For example, lines for \emph{set} and \emph{unset} events in their event histories are \emph{setEventHistory.lines = [[2, "A"], [3, "B"], [5, "C"]]} and \emph{unsetEventHistory.lines = [[4, null]]} respectively. Since only the last value of set or unset operations that is significant, using sing the two lists, we can identify that line 5 is the last line of set and unset operations that is significant to the attribute \emph{name}. Therefore, lines 2 to 4 can be put into the ignore list.  
+
+The algorithm to execute this proposition is shown in Alg. \ref{alg:fill_ignore_list}. It takes three inputs: two list of \emph{Line}, \emph{setEventLines} and \emph{unsetEventLines}, and a list of Integer, \emph{ignoreList}. The \emph{Line} is a structure that represents an event. It carries the \emph{lineNumber} of the event in its CBP representation as well as the \emph{value} involved. The \emph{setEventLines} and \emph{unsetEventLines} are lists that contains the \emph{Line}s where the event \emph{setAttributeEvent} and \emph{unsetAttributeEvent} appear in a CBP representation. 
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKwProg{Struct}{struct}{}{end}
+\Struct{Line}{
+    Integer $lineNumber$;
+    Var $value$;
+}
+\Input{two lists of Line $setEventLines$ and $unsetEventLines$, a list of Integer $ignoreList$}
+\Output{a list of Integer $ignoreList$}
+\SetKwBlock{Beginn}{beginn}{ende}
+\Begin{
+$setLastLine$ $\leftarrow$ getLastLine($setEventLines$)\;
+$unsetLastLine$ $\leftarrow$ getLastLine($unsetEventLines$)\;
+\uIf{$setLastLine > unsetLastLine$}{
+    Add every line number in $setEventLines$ into $ignoreList$ except the last value\;
+    Add all line numbers in $unsetEventLines$ into $ignoreList$\; 
+}
+\ElseIf{$setLastLine < unsetLastLine$}{
+    Add all line numbers in $setEventLines$ into $ignoreList$\;
+    Add all line numbers in in $unsetEventLines$ into $ignoreList$\; 
+}
+\Return{$ignoreList$}\;
+}
+\caption{Algorithm to identify lines that can be ignored for attribute's \emph{set} and \emph{unset} operations}
+\label{alg:fill_ignore_list}
+\end{algorithm}
+
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of \emph{name} reference assignments.},label=lst:set_unset_reference]
+create node of Node
+create n1 of Node
+create n2 of Node
+create n3 of Node
+set associate of node with n1    //node.associate=n1
+set associate of node with n2    //node.associate=n2
+unset associate of node           //node.associate=null
+set associate of node with n3    //node.associate=n3
+\end{lstlisting}
+
+The same algorithm (Alg. \ref{alg:fill_ignore_list}) can also be applied to set and unset operations of a containment reference such as described in Lst. \ref{lst:set_unset_reference}. 
+
+
+\subsection{Add, Remove, and Move Operations}
+\label{subsec:add_remove_and_move_operations}
+An attribute can also contains more than one value; we can add some values to and remove them from it. For example (List. \ref{lst:add_remove_attribute_literal_example}), \emph{node} object has \emph{values} attribute that can contains many integer values. We add values 11, 12, and 13 subsequently (line 2-4) to the attribute and remove the value 12 at line 5. 
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_attribute_literal_example]
+create node of Node
+add 11 to node.values      //node.values=[11] 
+add 12 to node.values      //node.values=[11,12] 
+add 13 to node.values      //node.values=[11,12,13] 
+remove 12 from node.values //node.values=[11,13] 
+\end{lstlisting}
+
+The execution of these operations can be optimised by ignoring the add and remove operations of the value 12 (line 3, 5) since the same end model can be produced only by adding 11 and 13 (line 2, 4). When events in List. \ref{lst:add_remove_attribute_example} are executed, they populate event's line lists, \emph{addEventLines = [[2,11,0], [3,12,1], [4,13,2]]} and \emph{removeEventLines = [[5,12,1]]}. With the two lists, we can identify the line number of the lines that can be put into the ignore list, producing \emph{ignoreList = [3, 5]}. The algorithm to execute this proposition is shown in Alg. \ref{alg:fill_ignore_list_add_remove_attribute}.
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_attribute_object_example]
+create node of Node
+create n1 of Node
+create n2 of Node
+create n3 of Node
+add n1 to node.children      //node.children=[n1] 
+add n2 to node.children      //node.children=[n1,n2] 
+add n3 to node.children      //node.children=[n1,n2,n3] 
+remove n2 from node.children //node.children=[n1,13] 
+\end{lstlisting}
+
+When List. \ref{lst:add_remove_attribute_example} line 5 is executed, the \emph{ObjectHistoryAdapter} will filter the \emph{addEventLines} and \emph{removeEventLines} by the operation's operand to ensure the lines that are going to be ignored are relevant -- not related to different values. This filtration  produces \emph{filteredAddLines} and \emph{filteredRemoveLines}, two list of Lines that are specific to the operand. After that, the last values, \emph{addLastLine} and \emph{removeLastLine} from both lists are obtained as parameters to make decision how to fill the \emph{ignoreList}. If \emph{addLastLine} is larger than \emph{removeLastLine} then all line numbers in \emph{filteredAddLines}, except for its last value, and all line numbers in \emph{filteredRemoveLines} are added into \emph{ignoreList}. Otherwise, all line numbers are both lists is added into \emph{ignoreList}. 
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKwProg{Struct}{struct}{}{end}
+\Struct{Line}{
+    Integer $lineNumber$;
+    Anytype $value$;
+    Integer $position$;
+}
+\Input{two lists of Line $addEventLines$ and $removeEventLines$, a list of Integer $ignoreList$, a variable of Anytype $operandValue$, a variable of Boolean $attributeIsMoved$}
+\Output{a list of Integer $ignoreList$}
+\SetKwBlock{Beginn}{beginn}{ende}
+\Begin{
+\If{$attributeIsMoved$ = false}{
+    $filteredAddLines$ $\leftarrow$ filterLinesByValue($addEventLines$, $operandValue$)\;
+$filteredRemoveLines$ $\leftarrow$ filterLinesByValue($removeEventLines$, $operandValue$)\;
+$addLastLine$ $\leftarrow$ getLastLine($filteredAddLines$)\;
+$removeLastLine$ $\leftarrow$ getLastLine($filteredRemoveLines$)\;
+\uIf{$addLastLine > removeLastLine$}{
+    Add every line number in $filteredAddLines$ into $ignoreList$ except the last value\;
+    Add all line numbers in $filteredRemoveLines$ into $ignoreList$\; 
+}
+\ElseIf{$addLastLine < removeLastLine$}{
+    Add all line numbers in $filteredAddLines$ into $ignoreList$\;
+    Add all line numbers in $filteredRemoveLines$ into $ignoreList$\; 
+}
+}
+\If{attribute is empty or only has a value}{
+    $attributeIsMoved$ $\leftarrow$ false\;
+    }
+\Return{$ignoreList$}\;
+}
+\caption{Algorithm to identify lines that can be ignored for attribute's \emph{add}, \emph{remove}, and \emph{move} operations}
+\label{alg:fill_ignore_list_add_remove_attribute}
+\end{algorithm}
+
+The `\emph{if attributeIsMoved = false}' condition at line 5 in Alg. \ref{alg:fill_ignore_list_add_remove_attribute} indicates that removing previous add and remove events can only be applied if no move operation has been executed previously to the attribute. This condition is required, since after optimisation, some operations are already removed and therefore makes some values may not exist, which changing the indexes of other values. Consequently, replaying all the events may not produce the same end model with the non-optimised CBP representation. 
+
+To illustrate this case, we compare the end model loaded from a CBP representation (List. \ref{lst:move_attribute_example}) to another model loaded from and optimised CBP representation (List. \ref{lst:move_attribute_example_error}) -- the same representation but has been optimised. The optimisation removes line 3 and 6 in List. List. \ref{lst:move_attribute_example} and when loaded back again the end models are not same. The non-optimised CBP representation produces \emph{node.values=[11,13]} while the optimised one produces \emph{node.values=[13,11]}. When \emph{remove 12} is executed (List. \ref{lst:move_attribute_example} line 6), the optimisation ignores the \emph{add 12} operation (List. \ref{lst:move_attribute_example} line 3) and thus makes the index of 13 is 1 in the optimised CBP, while the index of 13 is 2 in the non-optimised CBP, and produces different end model when \emph{move from 0 to 1} (List. \ref{lst:move_attribute_example_error} line 4) is executed. 
+
+The \emph{attributeIsMoved}'s state is set to true when a move operation is applied within it's attribute and the number of of it's attributes' values is more than 1. The \emph{attributeIsMoved}'s state is set to false again when the attribute is empty or only has a value (\ref{alg:fill_ignore_list_add_remove_attribute}, line 18, 19) since any move operation does not affect the indexes of the attributes' values.
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example]
+create node of Node
+add 11 to node.values            //node.values=[11] 
+add 12 to node.values            //node.values=[11,12] 
+add 13 to node.values            //node.values=[11,12,13] 
+move from 0 to 1 in node.values  //node.values=[12,11,13]  
+remove 12 from node.values       //node.values=[11,13] 
+\end{lstlisting}
+
+\begin{lstlisting}[style=eol,caption={Example of optimised CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example_error]
+create node of Node              //(1)  
+add 11 to node.values            //(2) node.values=[11] 
+add 13 to node.values            //(4) node.values=[11,13] 
+move from 0 to 1 in node.values  //(5) node.values=[13,11]   
+\end{lstlisting}
+
+
+
+
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_object_example]
+create node of Node
+create n1 of Node
+create n2 of Node
+create n3 of Node
+add n1 to node.children            //node.children=[n1] 
+add n2 to node.children            //node.children=[n1,n2] 
+add n3 to node.children            //node.children=[n1,n2,n3] 
+move from 0 to 1 in node.children  //node.children=[n2,n1,n3]  
+remove n2 from node.children       //node.children=[n1,n3] 
+\end{lstlisting}
+
+\begin{lstlisting}[style=eol,caption={Example of optimised CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example_object_error]
+create node of Node                //(1)  
+create n1 of Node                  //(2)  
+create n3 of Node                  //(4)  
+add n1 to node.children            //(5) node.children=[n1] 
+add n3 to node.children            //(7) node.children=[n1,n3] 
+move from 0 to 1 in node.children  //(8) node.children=[n3,n1]   
+\end{lstlisting}
+
+
+\subsection{Create and Delete Operations}
+\label{subsec:create_and_delete_operations}
+The examples of object's create event has been demonstrated in several Listings in this paper where \emph{create} is the keyword that denotes the event in a CBP representation. The create operation is only executed  once per object. It cannot be created more than once. Meanwhile, the example of object's delete event is exhibited in Lst. \ref{lst:cbpmodel}. When an object is deleted, it means that the object is completely removed from the model -- no longer exists. Therefore, all events (create, delete, set, unset, add) related to the object can be ignored -- there is no need to create the object and all its attributes' events can be ignored as well. 
+
+If  Lst. \ref{lst:cbpmodel} is optimised by removing node n3 (n5 is removed first since n5 is contained in n3), then the otimisation produces the CBP representation as in Lst. \ref{lst:cbpmodel_optimised}. The optimisation ignores 10 lines (lines 6, 7, 10, 11, 13, 15, 17, 18, 19, and 20) since those lines are related to nodes \emph{n3} and \emph{n5} and ignoring the lines still produces the same end model to the one produced by the non-optimised CBP representation (Lst. \ref{lst:cbpmodel}). 
+
+\begin{lstlisting}[style=eol,caption={Change-based representation of the model of Figure \ref{fig:initial_model} after removal of node \emph{n5}.},label=lst:cbpmodel_optimised]
+session s1                   //(1)
+create n1 of Node            //(2)
+set name of n1 with "A"      //(3)  n1.name="A"
+create n2 of Node            //(4)
+set name of n2 with "B"      //(5)  n2.name="B"
+create n4 of Node            //(8)
+set name of n4 with "D"      //(9)  n4.name="D"
+add n2 to n1.children        //(12) n1.children={n2}
+add n4 to n1.children        //(14) n1.children={n2,n4}
+session s2                   //(16)
+\end{lstlisting}
+
+We use Alg. \ref{alg:create_delete} to determine lines that are ignored after a \emph{delete} operation. The algorithm takes two inputs, \emph{deletedObject}, an variable of object that is deleted, and \emph{ignoreList}, a list of Integer that contains ignored line numbers. After some processes, the algorithm will return the \emph{ignoreList} as its output. The algorithm starts by checking whether the \emph{deletedObject} is already moved or not (line 2), if it is not then it is safe to remove all lines that refer to the object (line 3). Otherwise, no action is executed. The algorithm then retrieves all event histories \emph{eventHistoryList} that refer to the object (line 4)and iterates through each event history (line 5-8). For every event history \emph{eventHistory} (line 5), the algorithm retrieves its lines \emph{lineList} (line 6) and put all their line numbers into the \emph{ignoreList} (line 7). After that, the algorithm continues to iterate through all its attributes and put all lines of their events into the \emph{ignoreList} as well (lines 12-15). As a result, the next time the CBP representation (Lst. \ref{lst:cbpmodel}) is loaded, the loading process can refer to the \emph{ignoreList} whether certain lines in the CBP representation are ignored or not.       
+
+\begin{algorithm}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\Input{a variable ofObject $deletedObject$, a list of Integer $ignoreList$}
+\Output{a list of Integer $ignoreList$}
+\Begin{
+$objectIsMoved$ $\leftarrow$ isObjectMoved($deletedObject$)\;
+\If{$objectIsMoved$ = false}{
+    $eventHistoryList$ $\leftarrow$ getAllEventHistories($deletedObject$)\; 
+    \ForEach{$eventHistory$ in $EventHistoryList$}{
+        $lineList$ $\leftarrow$ getLines($eventHistory$)\;
+        Add all line numbers in $lineList$ into $ignoreList$\; 
+    }
+    $attributeList$ $\leftarrow$ getAllAttributes($deletedObject$)\;
+    \ForEach{$attribute$ in $attributeList$}{
+        $eventHistoryList$ $\leftarrow$ getAllEventHistories($attribute$)\;
+        \ForEach{$eventHistory$ in $EventHistoryList$}{
+            $lineList$ $\leftarrow$ getLines($eventHistory$)\;
+            Add all line numbers in $lineList$ into $ignoreList$\; 
+        }       
+    }   
+}
+\Return{$ignoreList$}\;
+}
+\caption{Algorithm to identify lines that are ignored after \emph{delete} operations}
+\label{alg:create_delete}
+\end{algorithm}
+
+For example, based on Lst. \ref{lst:cbpmodel}, 
+
+\section{Loading Time Test}
+\label{sec:loading_time_test}
+We have implemented a prototype\footnote{The prototype is available under \url{https://github.com/epsilonlabs/emf-cbp}} of the change-based model persistence upon the Eclipse Modelling Framework and utilise its notification facilities to create a CBP representation. We test the performance of our prototype to gain insight ho much efficiency that can  be gained with the optimisation algorithms. We do comparison on loading speed between optimised CBP and non-optimised CBP, and also with XMI, a common standard for model serialisation, as the comparison baseline. The  comparison is depicted in Fig. \ref{fig:loading_speed}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{loading_speed}
+\caption{A comparison on loading time between XMI (LoaXMI), optimised CBP (LoOCBP), and non-optimised CBP (LoaCBP).}
+\label{fig:loading_speed}
+\end{figure}
+
+In performing our comparison, we seek the relationship between number of nodes and time required to all the nodes. The number of nodes increases each time we perform measurement. We perform an iterative measurement that starts with an empty model -- no node exists -- and then increases the number of nodes by 500 for each succeeding iteration until the number reaches 55,500. In each iteration, first, initial nodes are populated as many as the number of nodes for that iteration. 
+
+The model then goes through an alteration process, a process that randomly manipulates the model with a number of different operations. The number of operations is as many as the initial number of nodes. So if the initial number of nodes is 1000 then the number of succeeding operations is 1000. The type of each operation is also randomly selected from a set of possible operation types, which are \emph{set attribute}, \emph{unset attribute}, \emph{add literal value}, \emph{move literal value}, \emph{remove literal value}, \emph{add object value}, \emph{move object value}, \emph{create object}, and d\emph{delete object}. The probability of occurrence of the types are set to ratio 1:1:3:2:1:3:2:1:1 respectively. As an example, based on the ratio, the probability for \emph{delete object} operation to occur is 1/15 for each iteration. 
+
+The population of the initial nodes and the alteration are then serialised as an Epsilon Object Language (EOL) script \cite{kolovos2006epsilon}. This serialisation makes the same produced script to be used across different loading time tests: loading XMI, optimised CBP, and non-optimised CBP. 
+
+Including create and delete operations in the succeeding operations makes the number of nodes at the end of each alteration possible to be different from the number of the initial nodes. Thus, we can identify in Fig. \ref{fig:loading_speed} that values in x-axis are not exactly the multiple of 500.    
+
+Fig. \ref{fig:loading_speed} shows that the non-optimised CBP consumes more time than XMI and optimised CBP in loading model. It follows an exponential pattern along the increment of nodes. Our optimisation is proven that optimised CBP is becoming more efficient when the number of loaded nodes is increasing. However, still, it cannot outperform the XMI's loading time, since more time is used to de-serialise the CBP format. Optimising the serialised format is possibly will reduce the loading time. From our simulation, with the specification of probability of random operations mentioned previously, the loading time of optimised CBP is 7.84 (\textit{SD} = 1.47) times slower in average than XMI's loading time. Although it is slower, the loading time for 70,271 nodes is only a bit more than one second which is tolerable for a user when loading a model in a modelling application. 
+
+However, models in the real world are most likely different from the random models generated in our loading time testing since real-world models have their own unique characteristics. Thus, the loading time are vary across different models. The optimised CBP may perform better or worse than the one presented in this paper. Moreover, the optimised CBP is not always out perform the non-optimised CBP in every condition. There is condition where optimised CBP is not faster than the non-optimised CBP that is when only \emph{create} operation is performed -- no other types of operations, since there is no event that can be ignored. 
+
+\section{Limitations}
+\label{sec:limitations}
 
 \section{Conclusions}
-
-
-\cite{Lamport:LaTeX}.
-
+\label{sec:conclusions}
 
 \begin{acks}
-
+This work was partly supported through a scholarship managed by \emph{Lembaga Pengelola Dana Pendidikan Indonesia} (Indonesia Endowment Fund for Education).
 \end{acks}
 
 
