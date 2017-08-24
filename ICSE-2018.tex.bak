@@ -13,7 +13,7 @@
 \usepackage{listings}
 	\lstset{
   		basicstyle=\ttfamily,
-  		frame=none,
+  		frame=none, 
   		breaklines=true,
   		numbers=left,
   		xleftmargin=2.5em,
@@ -104,45 +104,39 @@
 %  \texttt{acmart.pdf} document}
 
 
-\author{Alfa Yohannis}
-%\authornote{}
-%\orcid{1234-5678-9012}
-\affiliation{%
-  \institution{Computer Science Department University of York}
-  \streetaddress{Heslington}
-  \city{York} 
-  %\state{Ohio} 
-  \postcode{YO10 5GH}
-  \country{United Kingdom} 
-}
-\email{ary506@york.ac.uk}
-
-\author{Dimitris Kolovos}
-%\authornote{}
-\affiliation{%
-  \institution{Computer Science Department University of York}
-  \streetaddress{Heslington}
-  \city{York} 
-  %\state{Ohio}
-  \country{United Kingdom} 
-  \postcode{YO10 5GH}
-}
-\email{dimitris.kolovos@york.ac.uk}
-
-\author{Fiona Polack}
-%\authornote{}
-\affiliation{%
-  \institution{Computer Science Department University of York}
-  \streetaddress{Heslington}
-  \city{York} 
-  %\state{Ohio}
-  \country{United Kingdom} 
-  \postcode{YO10 5GH}
-}
-\email{fiona.polack@york.ac.uk}
-
-% The default list of authors is too long for headers}
-\renewcommand{\shortauthors}{A. Yohannis et al.}
+%\author{Alfa Yohannis}
+%\affiliation{
+%  \institution{Computer Science Department University of York}
+%  \streetaddress{Heslington}
+%  \city{York} 
+%  \postcode{YO10 5GH}
+%  \country{United Kingdom} 
+%}
+%\email{ary506@york.ac.uk}
+%
+%\author{Dimitris Kolovos}
+%\affiliation{
+%  \institution{Computer Science Department University of York}
+%  \streetaddress{Heslington}
+%  \city{York} 
+%  \country{United Kingdom} 
+%  \postcode{YO10 5GH}
+%}
+%\email{dimitris.kolovos@york.ac.uk}
+%
+%\author{Fiona Polack}
+%%\authornote{}
+%\affiliation{%
+%  \institution{Computer Science Department University of York}
+%  \streetaddress{Heslington}
+%  \city{York} 
+%  \country{United Kingdom} 
+%  \postcode{YO10 5GH}
+%}
+%\email{fiona.polack@york.ac.uk}
+%
+%% The default list of authors is too long for headers}
+%\renewcommand{\shortauthors}{A. Yohannis et al.}
 
 
 \begin{abstract}
@@ -188,9 +182,10 @@ In this paper, we propose a change-based, as an alternative to stated-based, per
 \label{sec:introduction}
 To gain the advantages of Model-Based Software Engineering in the context of complex and large systems, the ability to process large models in an incremental fashion as they evolve is necessary. Existing incremental model processing techniques only yields limited performance benefits due to imprecise and slow model change detection capabilities or are only limited to a single-developer environment, which is not applicable for real-world software development projects.
 
-Instead of persisting snapshots of states of models, we propose turning models inside out and persisting their change history. The proposed approach has the potential to deliver step-change performance benefits in incremental model processing, as well as a wide range of other benefits and novel capabilities. This paper aims at extending our previous work, an early implementation of change-based persistence \cite{yohannis2017turning}, by proposing algorithms to optimise the loading time of the change-based persistence.
+Instead of persisting snapshots of states of models, we propose turning models inside out and persisting their change history. The proposed approach has the potential to deliver step-change performance benefits in incremental model processing, as well as a wide range of other benefits and novel capabilities. While persisting changes to large models is expected to be much faster and resource-efficient compared to state-based approaches, loading models into memory by naively replaying the entire change history is expected to have a significant overhead. To address this challenge, we propose algorithms and data structures that will reduce the cost of change-based model loading (e.g. by recording and ignoring events -- events that are later overridden or cancelled out by other events), extending the foundational work of Yohannis et al. \cite{yohannis2017turning}.
 
-The rest of the paper is structured as follows. %Section \ref{sec:the_key_challenge_of_ _incrementality} reviews the key-challenge of incrementality in MBSE. Section \ref{sec:identifying_changes_in models} provides an overview of existing approaches for identifying changes in models. Section \ref{sec:proposed_approach} overviews our proposed approach and Section \ref{sec:prototype_implementation} discusses our prototype implementation on top of the Eclipse Modelling Framework. The potential benefits and novel capabilities, as well as the challenges of change-based model persistence, are presented in Sect. \ref{sec:benefits_and_novel_capabilities} and Sect. \ref{sec:challenges_and_future_works} respectively. Section \ref{sec:evaluation_strategy} presents our evaluation strategy and Sect. \ref{sec:conclusions} concludes this paper.
+The rest of the paper is structured as follows. Section \ref{sec:change_based_persistence} presents briefly the concept of change-based persistence. Section \ref{sec:related_work} provides an overview of existing related work. Section \ref{sec:proposed_approach} overviews our proposed approach. The algorithms to optimise the loading time of change-based persistence, as well as its loading time test, are presented in Sect. \ref{sec:loading_time_optimisation} and Sect. \ref{sec:loading_time_test} respectively. 
+Section \ref{sec:limitations} presents the limitation of our approach and Sect. \ref{sec:conclusions} concludes this paper.
 
 \section{Change-based Persistence}
 \label{sec:change_based_persistence}
@@ -220,7 +215,7 @@ A non-incremental model validation engine, after the removal of nodes \emph{n3} 
 
 Similarly, a non-incremental model-to-text transformation would generate and overwrite all output text files from scratch. On the contrary, an incremental model-to-text transformation, would identify that it only needs to delete the HTML files of nodes \emph{n3} and \emph{n5} since they have been removed and generate a new HTML file for node \emph{n1} as the number of its children has changed -- but not the text files of nodes \emph{n2} and \emph{n4}, as these cannot have been affected by the changes made to the model.
 
-While the overhead of executing transformations and validation constraints on small models like the one in Fig. \ref{fig:initial_model} can be neglected, non-incremental execution can become a significant bottleneck for large evolving models, especially when a development cycle is closer to its end, when developers tend to perform many small changes to fine-tune systems. Thus, a sophisticated impact analysis is needed to reduce the amount of code regeneration in order to keep the overhead minimum \cite{selic2003pragmatics}.  
+While the overhead of executing transformations and validation constraints on small models like the one in Fig. \ref{fig:initial_model} is not significant, non-incremental execution can become a significant bottleneck for large evolving models, especially when a development cycle is closer to its end, when developers tend to perform many small changes to fine-tune systems. Thus, a sophisticated impact analysis is needed to reduce the amount of code regeneration in order to keep the overhead minimum \cite{selic2003pragmatics}.  
 
 %As an example to explain incremental re-execution of queries on structured models, we use an OCL implementation of the domain-specific constraint in List. \ref{lst:constraint}.
 %
@@ -418,15 +413,13 @@ During a model development, an attribute of an object can be assigned many times
 
 \begin{lstlisting}[style=eol,caption={Example of CBP representation of \emph{name} attribute assignments.},label=lst:set_unset_example]
 create node of Node
-set name of node with "A"    //node.name="A"    
-set name of node with "B"    //node.name="B"
-unset name of node           //node.name=null
-set name of node with "C"    //node.name="C"
+set node.name to "A"    //node.name="A"    
+set node.name to "B"    //node.name="B"
+unset node.name         //node.name=null
+set node.name to "C"    //node.name="C"
 \end{lstlisting}
 
-To make the optimisastion possible, the line numbers where the attribute \emph{name} affected in Lst. \ref{lst:set_unset_example} are stored into its respective object history.  For example, lines for \emph{set} and \emph{unset} events in their event histories are \emph{setEventHistory.lines = [[2, "A"], [3, "B"], [5, "C"]]} and \emph{unsetEventHistory.lines = [[4, null]]} respectively. Since only the last value of set or unset operations that is significant, using sing the two lists, we can identify that line 5 is the last line of set and unset operations that is significant to the attribute \emph{name}. Therefore, lines 2 to 4 can be put into the ignore list.  
-
-The algorithm to execute this proposition is shown in Alg. \ref{alg:fill_ignore_list}. It takes three inputs: two list of \emph{Line}, \emph{setEventLines} and \emph{unsetEventLines}, and a list of Integer, \emph{ignoreList}. The \emph{Line} is a structure that represents an event. It carries the \emph{lineNumber} of the event in its CBP representation as well as the \emph{value} involved. The \emph{setEventLines} and \emph{unsetEventLines} are lists that contains the \emph{Line}s where the event \emph{setAttributeEvent} and \emph{unsetAttributeEvent} appear in a CBP representation. 
+To make the optimisastion possible, the line numbers where the attribute \emph{name} affected in Lst. \ref{lst:set_unset_example} are stored into its respective object history.  For example, lines for \emph{set} and \emph{unset} events in their event histories are \emph{setEventHistory.lines = setEventLines = [[2, "A"], [3, "B"], [5, "C"]]} and \emph{unsetEventHistory.lines = unsetEventLines = [[4, null]]} respectively. Since only the last value of set or unset operations that is significant, using the two lists, we can identify that line 5 is the last line of set and unset operations that is significant for the attribute \emph{name}. Therefore, lines 2 to 4 can be put into the ignore list.  
 
 \begin{algorithm}
 \SetKwInOut{Input}{input}
@@ -443,9 +436,10 @@ The algorithm to execute this proposition is shown in Alg. \ref{alg:fill_ignore_
 $setLastLine$ $\leftarrow$ getLastLine($setEventLines$)\;
 $unsetLastLine$ $\leftarrow$ getLastLine($unsetEventLines$)\;
 \uIf{$setLastLine > unsetLastLine$}{
-    Add every line number in $setEventLines$ into $ignoreList$ except the last value\;
+    Add every line number in $setEventLines$ into $ignoreList$ except the last line\;
     Add all line numbers in $unsetEventLines$ into $ignoreList$\; 
 }
+
 \ElseIf{$setLastLine < unsetLastLine$}{
     Add all line numbers in $setEventLines$ into $ignoreList$\;
     Add all line numbers in in $unsetEventLines$ into $ignoreList$\; 
@@ -453,29 +447,31 @@ $unsetLastLine$ $\leftarrow$ getLastLine($unsetEventLines$)\;
 \Return{$ignoreList$}\;
 }
 \caption{Algorithm to identify lines that can be ignored for attribute's \emph{set} and \emph{unset} operations}
-\label{alg:fill_ignore_list}
+\label{alg:set_unset_optimisation}
 \end{algorithm}
 
+The algorithm to execute this argument is shown in Alg. \ref{alg:set_unset_optimisation}. It takes three inputs: two list of \emph{Line}, \emph{setEventLines} and \emph{unsetEventLines}, and a list of Integer, \emph{ignoreList}. The \emph{Line} is a structure that represents an event. It carries the \emph{lineNumber} of the event in its CBP representation as well as the \emph{value} involved. The \emph{setEventLines} and \emph{unsetEventLines} are lists that contains the \emph{Line}s where the event \emph{setAttributeEvent} and \emph{unsetAttributeEvent} appear in a CBP representation and the operand's value included in the event. The algorithm starts by retrieving the last lines of \emph{setEventLines} and \emph{unsetEventLines} using the \emph{getLastLine} function and assigning them to variables \emph{setLastLine} and \emph{unsetLastLine} (lines 5 and 6). If \emph{setLastLine} is larger than \emph{unsetLastLine} then every line number that is in the \emph{setEventLines} are put into the \emph{ignoreList} excluding the last value since the last line still has to be executed to produce the same end model (lines 7-9). If \emph{unsetLastLine} is larger than \emph{setLastLine} then \emph{unset} operation is the last operation that is executed (line 10). Therefore, there is no need to executes all \emph{set} and \emph{unset} operations -- all lines can be ignored. Every line numbers in \emph{setEventLines} and \emph{unsetEventLines} are put into the \emph{ignoreList}. The \emph{ignoredList} is then returned for further processes.
 
 \begin{lstlisting}[style=eol,caption={Example of CBP representation of \emph{name} reference assignments.},label=lst:set_unset_reference]
-create node of Node
 create n1 of Node
 create n2 of Node
 create n3 of Node
-set associate of node with n1    //node.associate=n1
-set associate of node with n2    //node.associate=n2
-unset associate of node           //node.associate=null
-set associate of node with n3    //node.associate=n3
+create n4 of Node
+set n1.associate to n2    //node.associate=n2
+set n1.associate to n3    //node.associate=n3
+unset n1.associate        //node.associate=null
+set n1.associate to n4    //node.associate=n4
 \end{lstlisting}
 
-The same algorithm (Alg. \ref{alg:fill_ignore_list}) can also be applied to set and unset operations of a containment reference such as described in Lst. \ref{lst:set_unset_reference}. 
+The algorithm (Alg. \ref{alg:set_unset_optimisation}) can also be applied to set and unset operations of a containment reference for CBP described in Lst. \ref{lst:set_unset_reference}. For nodes \emph{n1}, \emph{n2}, \emph{n3}, and \emph{n4} are created at the beginning of the creation of its model (line 1-4). The \emph{n1}'s single containment reference, \emph{associate}, is then assigned \emph{n2} and \emph{n3} accordingly (lines 5-6), before nullified or unset (line 7). Finally, the \emph{n1.associate} is set to \emph{n4}. 
 
+Using the same optimisation to set and unset operations of containment reference \emph{associate}, we can omit lines 5 to 7 to produce the same end model. In in their event histories, the lines for set and unset operations are \emph{setEventLines = [[5, n2], [6, n3], [8, n4]]} and \emph{unsetEventLines = [[7, null]]} respectively. Since only the last value of set or unset operations that is significant, using the two lists, we can identify that line 8 is the last line of set and unset operations that is significant for the containment reference \emph{associate}. Therefore, lines 5 to 7 can be put into the ignore list.
 
 \subsection{Add, Remove, and Move Operations}
 \label{subsec:add_remove_and_move_operations}
-An attribute can also contains more than one value; we can add some values to and remove them from it. For example (List. \ref{lst:add_remove_attribute_literal_example}), \emph{node} object has \emph{values} attribute that can contains many integer values. We add values 11, 12, and 13 subsequently (line 2-4) to the attribute and remove the value 12 at line 5. 
+An attribute can also contains many values; we can add remove values from it. For example (List. \ref{lst:add_remove_attribute_literal_example}), \emph{node} object has \emph{values} attribute that can contains many integer values. We add values 11, 12, and 13 subsequently (line 2-4) to the attribute and remove the value 12 at line 5. We show in the commented parts the states of \emph{node.values}.  
 
-\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_attribute_literal_example]
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_move_attribute]
 create node of Node
 add 11 to node.values      //node.values=[11] 
 add 12 to node.values      //node.values=[11,12] 
@@ -483,20 +479,7 @@ add 13 to node.values      //node.values=[11,12,13]
 remove 12 from node.values //node.values=[11,13] 
 \end{lstlisting}
 
-The execution of these operations can be optimised by ignoring the add and remove operations of the value 12 (line 3, 5) since the same end model can be produced only by adding 11 and 13 (line 2, 4). When events in List. \ref{lst:add_remove_attribute_example} are executed, they populate event's line lists, \emph{addEventLines = [[2,11,0], [3,12,1], [4,13,2]]} and \emph{removeEventLines = [[5,12,1]]}. With the two lists, we can identify the line number of the lines that can be put into the ignore list, producing \emph{ignoreList = [3, 5]}. The algorithm to execute this proposition is shown in Alg. \ref{alg:fill_ignore_list_add_remove_attribute}.
-
-\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_attribute_object_example]
-create node of Node
-create n1 of Node
-create n2 of Node
-create n3 of Node
-add n1 to node.children      //node.children=[n1] 
-add n2 to node.children      //node.children=[n1,n2] 
-add n3 to node.children      //node.children=[n1,n2,n3] 
-remove n2 from node.children //node.children=[n1,13] 
-\end{lstlisting}
-
-When List. \ref{lst:add_remove_attribute_example} line 5 is executed, the \emph{ObjectHistoryAdapter} will filter the \emph{addEventLines} and \emph{removeEventLines} by the operation's operand to ensure the lines that are going to be ignored are relevant -- not related to different values. This filtration  produces \emph{filteredAddLines} and \emph{filteredRemoveLines}, two list of Lines that are specific to the operand. After that, the last values, \emph{addLastLine} and \emph{removeLastLine} from both lists are obtained as parameters to make decision how to fill the \emph{ignoreList}. If \emph{addLastLine} is larger than \emph{removeLastLine} then all line numbers in \emph{filteredAddLines}, except for its last value, and all line numbers in \emph{filteredRemoveLines} are added into \emph{ignoreList}. Otherwise, all line numbers are both lists is added into \emph{ignoreList}. 
+The execution of these operations can be optimised by ignoring the add and remove operations of the value 12 (lines 3 and 5) since we can produce the same end model only by adding 11 and 13 (line 2, 4). When events in List. \ref{lst:add_remove_move_attribute} are executed, they populate line lists for add and remove event histories of attribute \emph{values}, \emph{addEventLines = [[2,11], [3,12], [4,13]]} and \emph{removeEventLines = [[5,12]]}. Using the two lists, we can identify the line number of lines that can be put into the ignore list, producing \emph{ignoreList = [3, 5]}. The algorithm to execute this argument is shown in Alg. \ref{alg:add_remove_move_optimisation}.
 
 \begin{algorithm}
 \SetKwInOut{Input}{input}
@@ -505,9 +488,8 @@ When List. \ref{lst:add_remove_attribute_example} line 5 is executed, the \emph{
 \Struct{Line}{
     Integer $lineNumber$;
     Anytype $value$;
-    Integer $position$;
 }
-\Input{two lists of Line $addEventLines$ and $removeEventLines$, a list of Integer $ignoreList$, a variable of Anytype $operandValue$, a variable of Boolean $attributeIsMoved$}
+\Input{two lists of Line $addEventLines$, $removeEventLines$, and $moveEventLines$, a list of Integer $ignoreList$, a variable of Anytype $operandValue$, a variable of Boolean $attributeIsMoved$, an object of Feature $feature$}
 \Output{a list of Integer $ignoreList$}
 \SetKwBlock{Beginn}{beginn}{ende}
 \Begin{
@@ -525,20 +507,40 @@ $removeLastLine$ $\leftarrow$ getLastLine($filteredRemoveLines$)\;
     Add all line numbers in $filteredRemoveLines$ into $ignoreList$\; 
 }
 }
-\If{attribute is empty or only has a value}{
-    $attributeIsMoved$ $\leftarrow$ false\;
+\If{feature is empty or feature only has a value}{
+    \uIf{feature is empty}{
+        Add all line numbers in $addEventLines$ into $ignoreList$\;
+    }\ElseIf{feature only has a value}{
+        Add every line number in $addEventLines$ into $ignoreList$ except the last value\;
     }
+        Add all line numbers in $removeEventLines$ into $ignoreList$\; 
+        Add all line numbers in $moveEventLines$ into $ignoreList$\; 
+        $attributeIsMoved$ $\leftarrow$ false\;
+}
 \Return{$ignoreList$}\;
 }
-\caption{Algorithm to identify lines that can be ignored for attribute's \emph{add}, \emph{remove}, and \emph{move} operations}
-\label{alg:fill_ignore_list_add_remove_attribute}
+\caption{Algorithm to identify lines that can be ignored for \emph{add}, \emph{remove}, and \emph{move} operations.}
+\label{alg:add_remove_move_optimisation}
 \end{algorithm}
 
-The `\emph{if attributeIsMoved = false}' condition at line 5 in Alg. \ref{alg:fill_ignore_list_add_remove_attribute} indicates that removing previous add and remove events can only be applied if no move operation has been executed previously to the attribute. This condition is required, since after optimisation, some operations are already removed and therefore makes some values may not exist, which changing the indexes of other values. Consequently, replaying all the events may not produce the same end model with the non-optimised CBP representation. 
+The algorithms takes seven inputs: three line lists -- addEventLines, removeEventLines, and moveEventLines -- that contain the lines of add, remove, and move events, an ignore list \emph{ignoreList}, the variable \emph{operandValue} to hold the value used in an event, a flag variable \emph{attributeIsMoved}, and an object of Feature \emph{feature} which can be an attribute or containment reference. The algorithm starts by checking the value of \emph{attributeIsMoved} to the member of the attribute's values if they are already moved or not (line ). We explain more the use of \emph{attributeIsMoved} later in this section. If the values are not moved yet, the algorithm continues with filtering all the line lists by the operandValue and stored them into filtered line lists: \emph{filteredAddLines} and \emph{filteredRemoveLines}. The algorithm the retrieves the last lines of the filtered line lists using the \emph{getLastLine} function and assigns them to \emph{addLastLine} and \emph{removeLastLine}. If the \emph{addLastLine} is larger than {removeLastLine} then all line numbers of {\emph{filteredAddLines} and \emph{filteredRemoveLines}, except for the last line of \emph{filteredAddLines}, are added into the \emph{ignoreList}. Otherwise, all line numbers in both filtered line lists are added into the\emph{ignoreList}.
 
-To illustrate this case, we compare the end model loaded from a CBP representation (List. \ref{lst:move_attribute_example}) to another model loaded from and optimised CBP representation (List. \ref{lst:move_attribute_example_error}) -- the same representation but has been optimised. The optimisation removes line 3 and 6 in List. List. \ref{lst:move_attribute_example} and when loaded back again the end models are not same. The non-optimised CBP representation produces \emph{node.values=[11,13]} while the optimised one produces \emph{node.values=[13,11]}. When \emph{remove 12} is executed (List. \ref{lst:move_attribute_example} line 6), the optimisation ignores the \emph{add 12} operation (List. \ref{lst:move_attribute_example} line 3) and thus makes the index of 13 is 1 in the optimised CBP, while the index of 13 is 2 in the non-optimised CBP, and produces different end model when \emph{move from 0 to 1} (List. \ref{lst:move_attribute_example_error} line 4) is executed. 
+The algorithm then proceeds by checking the feature. If the feature is empty then all line numbers in the \emph{addEventLines} are added into the \emph{ignoreList}. If the feature only has one value, all the line numbers also added into the \emph{ignoreList} except the last line. The algorithm then proceeds by adding all line numbers in \emph{removeEventLines} and \emph{moveEventLines} into the \emph{ignoreList}. After that, \emph{attributeIsMoved} is set to false. Finally, the \emph{ignoreList} is returned for further operations.    
 
-The \emph{attributeIsMoved}'s state is set to true when a move operation is applied within it's attribute and the number of of it's attributes' values is more than 1. The \emph{attributeIsMoved}'s state is set to false again when the attribute is empty or only has a value (\ref{alg:fill_ignore_list_add_remove_attribute}, line 18, 19) since any move operation does not affect the indexes of the attributes' values.
+\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s add and remove operations.},label=lst:add_remove_move_reference]
+create n1 of Node
+create n2 of Node
+create n3 of Node
+create n4 of Node
+add n2 to node.children      //n1.children=[n2] 
+add n3 to node.children      //n1.children=[n2,n3] 
+add n4 to node.children      //n1.children=[n2,n3,n4] 
+remove n3 from node.children //n1.children=[n1,n4] 
+\end{lstlisting}
+
+The algorithm (Alg. \ref{alg:add_remove_move_optimisation}) can also be applied to add, remove, and move operations of a containment reference for CBP described in Lst. \ref{lst:add_remove_move_reference}. For nodes \emph{n1}, \emph{n2}, \emph{n3}, and \emph{n4} are created at the beginning of the creation of its model (line 1-4). The \emph{n1}'s multivalue containment reference, \emph{children}, is then added \emph{n2},\emph{n3}, and \emph{n4} accordingly (lines 5-7), before the removal of node \emph{n3} (line 8). 
+
+Using the same optimisation to \emph{add}, \emph{remove}, and \emph{move} operations of containment reference \emph{children}, we can omit lines 6 to 8 to produce the same end model. In in their event histories, the lines for set and unset operations are \emph{addEventLines = [[5, n2], [6, n3], [7, n4]]} and \emph{removeEventLines = [[8, n3]]} respectively. Since the \emph{remove} operation at line 8 makes itself and the \emph{add} operation at line 6 insignificant, lines 6 and 8 can be put into the ignore list.
 
 \begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example]
 create node of Node
@@ -556,30 +558,34 @@ add 13 to node.values            //(4) node.values=[11,13]
 move from 0 to 1 in node.values  //(5) node.values=[13,11]   
 \end{lstlisting}
 
+The `\emph{if attributeIsMoved = false}' condition at line 5 in Alg. \ref{alg:add_remove_move_optimisation} indicates that removing previous add and remove events can only be applied if no move operation has been executed previously to the attribute. This condition is required, since after optimisation, some operations are already removed and therefore makes some values may not exist, which changing the indexes of other values. Consequently, replaying all the events may not produce the same end model with the non-optimised CBP representation. 
+
+To illustrate this case, we compare the end model loaded from a CBP representation (List. \ref{lst:move_attribute_example}) to another model loaded from and optimised CBP representation (List. \ref{lst:move_attribute_example_error}) -- the same representation but has been optimised. The optimisation removes line 3 and 6 in List. List. \ref{lst:move_attribute_example} and when loaded back again the end models are not same. The non-optimised CBP representation produces \emph{node.values=[11,13]} while the optimised one produces \emph{node.values=[13,11]}. When \emph{remove 12} is executed (List. \ref{lst:move_attribute_example} line 6), the optimisation ignores the \emph{add 12} operation (List. \ref{lst:move_attribute_example} line 3) and thus makes the index of 13 is 1 in the optimised CBP, while the index of 13 is 2 in the non-optimised CBP, and produces different end model when \emph{move from 0 to 1} (List. \ref{lst:move_attribute_example_error} line 4) is executed. 
+
+The \emph{attributeIsMoved}'s state is set to true when a move operation is applied within it's attribute and the number of of it's attributes' values is more than 1. The \emph{attributeIsMoved}'s state is set to false again when the attribute is empty or only has a value (\ref{alg:add_remove_move_optimisation}, line 18-26) since any move operation does not affect the indexes of the attributes' values.
 
 
 
-\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_object_example]
-create node of Node
-create n1 of Node
-create n2 of Node
-create n3 of Node
-add n1 to node.children            //node.children=[n1] 
-add n2 to node.children            //node.children=[n1,n2] 
-add n3 to node.children            //node.children=[n1,n2,n3] 
-move from 0 to 1 in node.children  //node.children=[n2,n1,n3]  
-remove n2 from node.children       //node.children=[n1,n3] 
-\end{lstlisting}
-
-\begin{lstlisting}[style=eol,caption={Example of optimised CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example_object_error]
-create node of Node                //(1)  
-create n1 of Node                  //(2)  
-create n3 of Node                  //(4)  
-add n1 to node.children            //(5) node.children=[n1] 
-add n3 to node.children            //(7) node.children=[n1,n3] 
-move from 0 to 1 in node.children  //(8) node.children=[n3,n1]   
-\end{lstlisting}
-
+%\begin{lstlisting}[style=eol,caption={Example of CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_object_example]
+%create node of Node
+%create n1 of Node
+%create n2 of Node
+%create n3 of Node
+%add n1 to node.children            //node.children=[n1] 
+%add n2 to node.children            //node.children=[n1,n2] 
+%add n3 to node.children            //node.children=[n1,n2,n3] 
+%move from 0 to 1 in node.children  //node.children=[n2,n1,n3]  
+%remove n2 from node.children       //node.children=[n1,n3] 
+%\end{lstlisting}
+%
+%\begin{lstlisting}[style=eol,caption={Example of optimised CBP representation of attribute \emph{values}'s move operations.},label=lst:move_attribute_example_object_error]
+%create node of Node                //(1)  
+%create n1 of Node                  //(2)  
+%create n3 of Node                  //(4)  
+%add n1 to node.children            //(5) node.children=[n1] 
+%add n3 to node.children            //(7) node.children=[n1,n3] 
+%move from 0 to 1 in node.children  //(8) node.children=[n3,n1]   
+%\end{lstlisting}
 
 \subsection{Create and Delete Operations}
 \label{subsec:create_and_delete_operations}
@@ -630,7 +636,7 @@ $objectIsMoved$ $\leftarrow$ isObjectMoved($deletedObject$)\;
 \label{alg:create_delete}
 \end{algorithm}
 
-For example, based on Lst. \ref{lst:cbpmodel}, 
+For example, based on Lst. \ref{lst:cbpmodel} and Fig. \ref{fig:history_structure}, at the moment when node \emph{n5} is deleted, it already had 5 instances of \emph{eventHistory}: 4 instances (\emph{createObjectEvent5}, \emph{addToReferenceEvent5}, \emph{deleteObjectEvent5}, and \emph{removeFromReferenceEvent5}) that are contained directly in its object history and 1 instance (\emph{setAttributeEvent5}) is contained in its attribute \emph{name} object history. Those instances has line lists that contain line numbers as follows: \emph{createObjectEvent5.lines = [[10]]}, \emph{addToReferenceEvent5.lines = [[15]]}, \emph{deleteObjectEvent5.lines = [[18]]}, and \emph{removeFromReferenceEvent5.lines = [[17]]}, \emph{setAttributeEvent5.lines = [[11, "B"]]}. Using Alg. \ref{alg:create_delete}, deleting node \emph{n5} means filling the \emph{ignoreList} with all the line numbers contained by its event histories. Thus, the deletion produces \emph{ignoreList = [10, 11, 15, 17, 18]}. Using the same approach, the deletion of node n3 adds more line numbers and produces \emph{ignoreList = [6, 7, 10, 11, 13, 15, 17, 18, 19, 20]}.
 
 \section{Loading Time Test}
 \label{sec:loading_time_test}
@@ -658,11 +664,23 @@ However, models in the real world are most likely different from the random mode
 \section{Limitations}
 \label{sec:limitations}
 
+The multi-value feature (attribute or reference) can only contain unique members. Feature that can contains not unique, repeated members has not been included yet.  
+Also non-containment reference has not been included as well. Only containment reference that has been tested. 
+Default values and non default values.
+
+The loading test has not been tested to real-world models. The model generated for testing might not reflect them. 
+
+
 \section{Conclusions}
 \label{sec:conclusions}
+In this paper, we have proposed a change-based, as an alternative to stated-based, persistence as an approach to persist a model. The persistence enables high-performance processing (e.g. transformation, validation) for incremental model by reducing the change identification cost of evolving models. We have illustrated our approach in implementing the persistence as well as its optimisation algorithms to improve its loading time. Based on our performance test on model loading time, optimised change-based persistence outperforms its unoptimised version. However, even though it still cannot outperform the stated-based persistence's loading time, it operates in the range of time that is still tolerable for users. 
+
+For future work, persisting models in a change-based format means that model files will keep growing in size during their evolution significantly faster than their state-based counterparts. To address this challenge, (1) we will propose sound change-compression operations (e.g. remove older/unused information) that can be used to reduce the size of a model in a controlled way. (2) We will develop a compact textual format that will minimise the amount of space required to record a change (a textual line-separated format is desirable to maintain compatibility with file-based version control systems). (3) We will propose a hybrid model persistence format which will be able to incorporate both change-based and state-based information. 
+
+%For the proposed approach to have a strong practical impact, it needs to be supported by modelling, model processing (e.g. transformation) languages, and model management (e.g. comparison, differencing, merging) tools. To address this challenge, (1) We will extend existing open-source graphical editor frameworks such as Sirius\footnote{\url{http://eclipse.org/sirius/}}, GMF\footnote{\url{http://www.eclipse.org/gmf-tooling/}}, and Papyrus\footnote{\url{http://eclipse.org/papyrus/}} so that they can support the development of editors that persist models in the proposed change-based format. (2) We will extend open-source model processing languages so that they can incrementally process change-based models. We will initially target languages of the well-established Epsilon family, which the PI is leading, but we will explore how other languages that already support incremental execution (e.g. OCL, ATL, IncQuery) can be extended with similar capabilities. (3) We will devise dedicated model comparison, differencing and merging algorithms, to support collaborative development using change-based models.
 
 \begin{acks}
-This work was partly supported through a scholarship managed by \emph{Lembaga Pengelola Dana Pendidikan Indonesia} (Indonesia Endowment Fund for Education).
+This work was partly supported through a scholarship managed by XXX. %\emph{Lembaga Pengelola Dana Pendidikan Indonesia} (Indonesia Endowment Fund for Education).
 \end{acks}
 
 

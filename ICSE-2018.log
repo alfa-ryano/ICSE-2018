@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.30)  23 AUG 2017 11:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.30)  24 AUG 2017 01:39
 entering extended mode
 **./ICSE-2018.tex
 (ICSE-2018.tex
@@ -1028,9 +1028,9 @@ Package caption Info: End \AtBeginDocument code.
 
 Excluding 'CCSXML' comment.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 17.28pt on input line 185.
+(Font)              scaled to size 17.28pt on input line 179.
 LaTeX Font Info:    Try loading font information for T1+LinuxBiolinumT-TLF on i
-nput line 185.
+nput line 179.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\libertine\t1linuxbiolinumt-tlf.fd
 "
@@ -1038,19 +1038,43 @@ File: T1LinuxBiolinumT-TLF.fd 2017/03/20 (autoinst) Font definitions for T1/Lin
 uxBiolinumT-TLF.
 )
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 17.28pt on input line 185.
+(Font)              scaled to size 17.28pt on input line 179.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxBiolinumT-TLF' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/n' will be
-(Font)              scaled to size 17.28pt on input line 185.
+(Font)              scaled to size 17.28pt on input line 179.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 185.
+(Font)              scaled to size 12.0pt on input line 179.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 185.
+(Font)              scaled to size 10.0pt on input line 179.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
+(Font)              scaled to size 7.0pt on input line 179.
+LaTeX Font Info:    Try loading font information for TS1+LinuxLibertineT-TLF on
+ input line 179.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\libertine\ts1linuxlibertinet-tlf.
+fd"
+File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/
+LinuxLibertineT-TLF.
+)
+LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 7.0pt on input line 179.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 9.0pt on input line 179.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 10.95pt on input line 179.
+LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 9.0pt on input line 179.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
+(Font)              scaled to size 9.0pt on input line 179.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 185.
+(Font)              scaled to size 9.0pt on input line 179.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1061,72 +1085,47 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\microtype\mt-msb.cfg"
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 7.3pt on input line 179.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 8.0pt on input line 179.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 8.0pt on input line 179.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 7.0pt on input line 185.
-LaTeX Font Info:    Try loading font information for TS1+LinuxLibertineT-TLF on
- input line 185.
+(Font)              scaled to size 8.0pt on input line 179.
+LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 8.0pt on input line 179.
+LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 6.2pt on input line 179.
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\libertine\ts1linuxlibertinet-tlf.
-fd"
-File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/
-LinuxLibertineT-TLF.
-)
-LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 185.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 9.0pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 10.95pt on input line 185.
-LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 185.
-LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.3pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 8.0pt on input line 185.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 8.0pt on input line 185.
-LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 185.
-LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.2pt on input line 185.
- <images/node_metamodel.pdf, id=74, 309.155pt x 82.3075pt>
+<images/node_metamodel.pdf, id=81, 309.155pt x 82.3075pt>
 File: images/node_metamodel.pdf Graphic file (type pdf)
 
 <use images/node_metamodel.pdf>
-Package pdftex.def Info: images/node_metamodel.pdf used on input line 201.
+Package pdftex.def Info: images/node_metamodel.pdf used on input line 196.
 (pdftex.def)             Requested size: 154.57712pt x 41.15364pt.
 
-<images/initial_chart.pdf, id=75, 583.17876pt x 262.9825pt>
+<images/initial_chart.pdf, id=82, 583.17876pt x 262.9825pt>
 File: images/initial_chart.pdf Graphic file (type pdf)
 
 <use images/initial_chart.pdf>
-Package pdftex.def Info: images/initial_chart.pdf used on input line 208.
+Package pdftex.def Info: images/initial_chart.pdf used on input line 203.
 (pdftex.def)             Requested size: 241.14749pt x 108.74243pt.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/it' will be
-(Font)              scaled to size 9.0pt on input line 209.
+(Font)              scaled to size 9.0pt on input line 204.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 5.5pt on input line 213.
+(Font)              scaled to size 5.5pt on input line 208.
  [1.1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
 
  <./images/node_metamodel.pdf> <./images/initial_chart.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 260.
+(Font)              scaled to size 9.0pt on input line 255.
  [2.2]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 265.
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 265.
+nput line 260.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 260.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd"
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -1136,35 +1135,35 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 266.
+(Font)              scaled to size 6.0pt on input line 261.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <6> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 266.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 261.
 
-Underfull \hbox (badness 10000) in paragraph at lines 305--305
+Underfull \hbox (badness 10000) in paragraph at lines 300--300
 [][][][][]$\T1/LinuxLibertineT-TLF/m/n/7 (+20) http : / / download . eclipse . 
 org / modeling / emf / emf / javadoc / 2 . 11 / org / eclipse / emf /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 305--305
+Underfull \hbox (badness 10000) in paragraph at lines 300--300
 [][][][][]$\T1/LinuxLibertineT-TLF/m/n/7 (+3) http : / / download . eclipse . o
 rg / modeling / emf / emf / javadoc / 2 . 11 / org / eclipse / emf / ecore /
  []
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 7.0pt on input line 322.
-[3.3] <images/object_history.pdf, id=208, 438.63875pt x 235.88126pt>
+(Font)              scaled to size 7.0pt on input line 317.
+[3.3] <images/object_history.pdf, id=215, 438.63875pt x 235.88126pt>
 File: images/object_history.pdf Graphic file (type pdf)
 
 <use images/object_history.pdf>
-Package pdftex.def Info: images/object_history.pdf used on input line 336.
+Package pdftex.def Info: images/object_history.pdf used on input line 331.
 (pdftex.def)             Requested size: 241.14749pt x 129.68109pt.
 
-<images/history_structure.pdf, id=210, 1145.27875pt x 1038.88126pt>
+<images/history_structure.pdf, id=217, 1145.27875pt x 1038.88126pt>
 File: images/history_structure.pdf Graphic file (type pdf)
 
 <use images/history_structure.pdf>
-Package pdftex.def Info: images/history_structure.pdf used on input line 378.
+Package pdftex.def Info: images/history_structure.pdf used on input line 373.
 (pdftex.def)             Requested size: 506.30087pt x 459.26505pt.
  [4.4 <./images/object_history.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1174,74 +1173,71 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5.5 <./images/history_structure.pdf>] [6.6]
 
-LaTeX Warning: Reference `lst:add_remove_attribute_example' on page 7 undefined
- on input line 486.
-
-
-LaTeX Warning: Reference `lst:add_remove_attribute_example' on page 7 undefined
- on input line 499.
+LaTeX Warning: Reference `lst:add_remove_attribute_literal_example' on page 7 u
+ndefined on input line 472.
 
 [7.7] [8.8]
 
 pdfTeX warning: pdflatex (file ./images/loading_speed.pdf): PDF inclusion: foun
 d PDF version <1.7>, but at most version <1.5> allowed
-<images/loading_speed.pdf, id=457, 845.07718pt x 597.55246pt>
+<images/loading_speed.pdf, id=436, 845.07718pt x 597.55246pt>
 File: images/loading_speed.pdf Graphic file (type pdf)
 
 <use images/loading_speed.pdf>
-Package pdftex.def Info: images/loading_speed.pdf used on input line 641.
+Package pdftex.def Info: images/loading_speed.pdf used on input line 647.
 (pdftex.def)             Requested size: 241.14749pt x 170.51393pt.
 
-Underfull \hbox (badness 1852) in paragraph at lines 642--642
+Underfull \hbox (badness 1852) in paragraph at lines 648--648
 []\T1/LinuxLibertineT-TLF/b/n/9 Figure 5: |A com-par-i-son on load-ing time be-
 tween XMI
  []
 
 
-Underfull \hbox (badness 1472) in paragraph at lines 642--642
+Underfull \hbox (badness 1472) in paragraph at lines 648--648
 \T1/LinuxLibertineT-TLF/b/n/9 (LoaXMI), op-ti-mised CBP (LoOCBP), and non-optim
 ised
  []
 
-Processing 'acks' comment.
+[9.9 <./images/loading_speed.pdf>] Processing 'acks' comment.
 \openout4 = `comment.cut'.
 
- Comment 'acks' writing to comment.cut.
-Straight input of comment.cut. (comment.cut) (ICSE-2018.bbl) [9.9 <./images/loa
-ding_speed.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 672.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 672.
+
+Comment 'acks' writing to comment.cut. Straight input of comment.cut.
+(comment.cut) (ICSE-2018.bbl) [10.10]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 690.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 690.
  (ICSE-2018.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 672.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 672.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 690.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 690.
 Package rerunfilecheck Info: File `ICSE-2018.out' has not changed.
 (rerunfilecheck)             Checksum: 147C4C981116A9AF25F0AF7DA44CAB1B;2480.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 672.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 690.
  )
-(\end occurred inside a group at level 1)
+(\end occurred inside a group at level 2)
 
-### simple group (level 1) entered at line 383 ({)
+### simple group (level 2) entered at line 526 ({)
+### simple group (level 1) entered at line 378 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 21762 strings out of 493334
- 343035 string characters out of 3136675
- 723631 words of memory out of 3000000
- 24174 multiletter control sequences out of 15000+200000
- 173915 words of font info for 330 fonts, out of 3000000 for 9000
+ 21725 strings out of 493334
+ 342174 string characters out of 3136675
+ 627631 words of memory out of 3000000
+ 24150 multiletter control sequences out of 15000+200000
+ 168927 words of font info for 319 fonts, out of 3000000 for 9000
  1302 hyphenation exceptions out of 8191
- 60i,21n,94p,1741b,1917s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 60i,21n,94p,1741b,1187s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/newtx/libert
 inealt.enc}{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}{
 C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}{C:
 /Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_ki75ao.enc}{C:/P
 rogram Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{C:/Pro
 gram Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_naooyc.enc}{C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{C:/Program
- Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}<C:/Program F
+am Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Program
+ Files (x86)/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}<C:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumT.pfb><C:/Program
  Files (x86)/MiKTeX 2.9/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/libertine/LinLibertineT.pfb><C:/P
@@ -1253,9 +1249,9 @@ eTI.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/rtxmi.pfb
 ram Files (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/Mi
 KTeX 2.9/fonts/type1/public/newtx/zxlri.pfb>
-Output written on ICSE-2018.pdf (9 pages, 1342622 bytes).
+Output written on ICSE-2018.pdf (10 pages, 1349378 bytes).
 PDF statistics:
- 592 PDF objects out of 1000 (max. 8388607)
- 259 named destinations out of 1000 (max. 500000)
- 49318 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 594 PDF objects out of 1000 (max. 8388607)
+ 250 named destinations out of 1000 (max. 500000)
+ 45222 words of extra memory for PDF output out of 51595 (max. 10000000)
 
