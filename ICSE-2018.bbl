@@ -121,13 +121,13 @@
 
 
 \bibitem[\protect\citeauthoryear{Yohannis, Polack, and Kolovos}{Yohannis
-  et~al\mbox{.}}{r in}]%
+  et~al\mbox{.}}{2017}]%
         {yohannis2017turning}
 \bibfield{author}{\bibinfo{person}{Alfa Yohannis}, \bibinfo{person}{Fiona
-  Polack}, {and} \bibinfo{person}{Dimitris Kolovos}.} \bibinfo{year}{2017 (to
-  appear in)}\natexlab{}.
+  Polack}, {and} \bibinfo{person}{Dimitris Kolovos}.}
+  \bibinfo{year}{2017}\natexlab{}.
 \newblock \showarticletitle{Turning Models Inside Out}. In
-  \bibinfo{booktitle}{{\em FlexMDE@MoDELS}}.
+  \bibinfo{booktitle}{{\em FlexMDE@MoDELS (to appear in)}}.
 \newblock
 
 
