@@ -666,13 +666,9 @@ However, models in the real world are most likely different from the random mode
 
 \section{Limitations}
 \label{sec:limitations}
+So far, we only address feature -- attribute or reference -- that can only contains unique members -- no duplicate values or objects. Duplicate members means that removal of a value /object does not mean the removal of other same values/objects since values/objects with different positions contained in the feature are perceived as different entity. Therefore, positions of values/objects have to be taken into account as well by the optimisation algorithm. We also only address containment reference -- deletion of an object will also delete its contained objects -- which is very different from the non-containment one that the deletion of an object does not delete its contained objects. The deletion has to identify non-containment reference so the creation events objects that are referenced should not be ignored. Furthermore, we also have not address features that has default values. Default value of a feature might not trigger any event. Failure to address this might produce different end models. 
 
-The multi-value feature (attribute or reference) can only contain unique members. Feature that can contains not unique, repeated members has not been included yet.  
-Also non-containment reference has not been included as well. Only containment reference that has been tested. 
-Default values and non default values.
-
-The loading test has not been tested to real-world models. The model generated for testing might not reflect them. 
-
+Moreover, the loading test performed might not reflect the CBP of the construction of real-world models. Each model has its own development characteristics and one feasible way to capture them is to ask modellers to create complex models using different modelling languages, persist their histories, and analyse the results to gain insight whether the optimisation really works for real-world models. 
 
 \section{Conclusions}
 \label{sec:conclusions}
