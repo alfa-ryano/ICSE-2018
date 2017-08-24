@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.30)  24 AUG 2017 03:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.30)  24 AUG 2017 03:51
 entering extended mode
 **./ICSE-2018.tex
 (ICSE-2018.tex
@@ -1098,14 +1098,14 @@ LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 6.2pt on input line 181.
 
-<images/node_metamodel.pdf, id=81, 309.155pt x 82.3075pt>
+<images/node_metamodel.pdf, id=80, 309.155pt x 82.3075pt>
 File: images/node_metamodel.pdf Graphic file (type pdf)
 
 <use images/node_metamodel.pdf>
 Package pdftex.def Info: images/node_metamodel.pdf used on input line 199.
 (pdftex.def)             Requested size: 154.57712pt x 41.15364pt.
 
-<images/initial_chart.pdf, id=82, 583.17876pt x 262.9825pt>
+<images/initial_chart.pdf, id=81, 583.17876pt x 262.9825pt>
 File: images/initial_chart.pdf Graphic file (type pdf)
 
 <use images/initial_chart.pdf>
@@ -1150,14 +1150,14 @@ rg / modeling / emf / emf / javadoc / 2 . 11 / org / eclipse / emf / ecore /
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 7.0pt on input line 320.
-[3.3] <images/object_history.pdf, id=215, 438.63875pt x 235.88126pt>
+[3.3] <images/object_history.pdf, id=213, 438.63875pt x 235.88126pt>
 File: images/object_history.pdf Graphic file (type pdf)
 
 <use images/object_history.pdf>
 Package pdftex.def Info: images/object_history.pdf used on input line 334.
 (pdftex.def)             Requested size: 241.14749pt x 129.68109pt.
 
-<images/history_structure.pdf, id=217, 1145.27875pt x 1038.88126pt>
+<images/history_structure.pdf, id=215, 1145.27875pt x 1038.88126pt>
 File: images/history_structure.pdf Graphic file (type pdf)
 
 <use images/history_structure.pdf>
@@ -1178,7 +1178,7 @@ ndefined on input line 475.
 
 pdfTeX warning: pdflatex (file ./images/loading_speed.pdf): PDF inclusion: foun
 d PDF version <1.7>, but at most version <1.5> allowed
-<images/loading_speed.pdf, id=436, 845.07718pt x 597.55246pt>
+<images/loading_speed.pdf, id=435, 845.07718pt x 597.55246pt>
 File: images/loading_speed.pdf Graphic file (type pdf)
 
 <use images/loading_speed.pdf>
@@ -1250,9 +1250,9 @@ eTI.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/txfonts/rtxmi.pfb
 ram Files (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/Mi
 KTeX 2.9/fonts/type1/public/newtx/zxlri.pfb>
-Output written on ICSE-2018.pdf (10 pages, 1350226 bytes).
+Output written on ICSE-2018.pdf (10 pages, 1349965 bytes).
 PDF statistics:
- 594 PDF objects out of 1000 (max. 8388607)
+ 593 PDF objects out of 1000 (max. 8388607)
  250 named destinations out of 1000 (max. 500000)
  45222 words of extra memory for PDF output out of 51595 (max. 10000000)
 
